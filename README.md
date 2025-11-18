@@ -14,18 +14,23 @@
 ### [Artefakte](https://github.com/im3an/EPWS2526AxtMoujtahidHavertz/tree/main/Artefacts)
 [**Domain Model**](https://github.com/im3an/EPWS2526AxtMoujtahidHavertz/tree/main/Artefacts/Domain%20Model)
 - [EPM Domain Model V1.0.pdf](https://github.com/im3an/EPWS2526AxtMoujtahidHavertz/blob/main/Artefacts/Domain%20Model/EPM%20Domain%20Model%20V1.0.pdf) 
-- [DomainModelV2.pdf](https://github.com/im3an/EPWS2526AxtMoujtahidHavertz/blob/main/Artefacts/Domain%20Model/DomainModelV2.pdf) **-NEU**\
+- [DomainModelV2.pdf](https://github.com/im3an/EPWS2526AxtMoujtahidHavertz/blob/main/Artefacts/Domain%20Model/DomainModelV2.pdf) **-NEU**<a/>
+
 [**Recherche**](https://github.com/im3an/EPWS2526AxtMoujtahidHavertz/tree/main/Artefacts/Recherche)
-- [Recherche.md](https://github.com/im3an/EPWS2526AxtMoujtahidHavertz/blob/main/Artefacts/Recherche/Recherche.md)\
+- [Recherche.md](https://github.com/im3an/EPWS2526AxtMoujtahidHavertz/blob/main/Artefacts/Recherche/Recherche.md)<a/>
+
 [**Retrospektiv**](https://github.com/im3an/EPWS2526AxtMoujtahidHavertz/tree/main/Artefacts/Retrospektiv)
-- [Retrospektiv_1.md](https://github.com/im3an/EPWS2526AxtMoujtahidHavertz/blob/main/Artefacts/Retrospektiv/Retrospektiv_1.md)\
+- [Retrospektiv_1.md](https://github.com/im3an/EPWS2526AxtMoujtahidHavertz/blob/main/Artefacts/Retrospektiv/Retrospektiv_1.md)<a/>
+
 [**Stakeholder**](https://github.com/im3an/EPWS2526AxtMoujtahidHavertz/tree/main/Artefacts/Stakeholder)
-- [EPM Stakeholder V1.0.pdf](https://github.com/im3an/EPWS2526AxtMoujtahidHavertz/blob/main/Artefacts/Stakeholder/EPM%20Stakeholder%20V1.0.pdf)\
+- [EPM Stakeholder V1.0.pdf](https://github.com/im3an/EPWS2526AxtMoujtahidHavertz/blob/main/Artefacts/Stakeholder/EPM%20Stakeholder%20V1.0.pdf)<a/>
+
 [**Szenario**]()
-- [Szenario.md](https://github.com/im3an/EPWS2526AxtMoujtahidHavertz/blob/main/Artefacts/Szenario/Szenario.md)\
+- [Szenario.md](https://github.com/im3an/EPWS2526AxtMoujtahidHavertz/blob/main/Artefacts/Szenario/Szenario.md)<a/>
+
 [**User Story**](https://github.com/im3an/EPWS2526AxtMoujtahidHavertz/tree/main/Artefacts/User%20Story)
 - [EP User Stories.pdf](https://github.com/im3an/EPWS2526AxtMoujtahidHavertz/blob/main/Artefacts/User%20Story/EP%20User%20Stories.pdf)
-- [Userstory_v1.md](https://github.com/im3an/EPWS2526AxtMoujtahidHavertz/blob/main/Artefacts/User%20Story/Userstory_v1.md)
+- [Userstory_v1.md](https://github.com/im3an/EPWS2526AxtMoujtahidHavertz/blob/main/Artefacts/User%20Story/Userstory_v1.md)<a/>
 
 [**Expose.md**](https://github.com/im3an/EPWS2526AxtMoujtahidHavertz/blob/main/Artefacts/Expose.md)
 
