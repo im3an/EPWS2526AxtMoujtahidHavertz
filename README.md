@@ -39,7 +39,9 @@
 - [Userstory_v1.md](https://github.com/im3an/EPWS2526AxtMoujtahidHavertz/blob/main/Artefacts/User%20Story/Userstory_v1.md)
 <a/>
 
-[**Expose.md**](https://github.com/im3an/EPWS2526AxtMoujtahidHavertz/blob/main/Artefacts/Expose.md)
+[**Expose.md**](https://github.com/im3an/EPWS2526AxtMoujtahidHavertz/blob/main/Artefacts/Expose.md)<a/>
+
+[**Technology-Bin.md**](https://github.com/im3an/EPWS2526AxtMoujtahidHavertz/blob/main/Artefacts/Technology-Bin.md) **-NEU**
 
 ### Artefakte im Miro
 [miro](https://miro.com/app/board/uXjVJyX-eOU=/)
