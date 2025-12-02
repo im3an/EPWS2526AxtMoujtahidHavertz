@@ -47,11 +47,11 @@
 
 | ADR | Titel | Status | Datum |
 |-----|-------|--------|-------|
-| [ADR-0001](./ADR-0001-web-basierte-anwendung.md) | Web-basierte Anwendung | angenommen | 2025-01-26 |
-| [ADR-0002](./ADR-0002-kartenbibliothek-leaflet-openstreetmap.md) | Kartenbibliothek - Leaflet.js und OpenStreetMap | angenommen | 2025-01-26 |
-| [ADR-0003](./ADR-0003-backend-framework-spring-boot.md) | Backend-Framework - Spring Boot | vorgeschlagen | 2025-01-26 |
-| [ADR-0004](./ADR-0004-gps-tracking-und-offline-funktionalitaet.md) | GPS-Tracking und Offline-Funktionalität | vorgeschlagen | 2025-01-26 |
-| [ADR-0005](./ADR-0005-cloud-infrastruktur.md) | Cloud-Infrastruktur | vorgeschlagen | 2025-01-26 |
+| [ADR-0001](Artefacts/ADR/ADR-0001-web-basierte-anwendung.md) | Web-basierte Anwendung | angenommen | 2025-01-26 |
+| [ADR-0002](Artefacts/ADR/ADR-0002-kartenbibliothek-leaflet-openstreetmap.md) | Kartenbibliothek - Leaflet.js und OpenStreetMap | angenommen | 2025-01-26 |
+| [ADR-0003](Artefacts/ADR/ADR-0003-backend-framework-spring-boot.md) | Backend-Framework - Spring Boot | vorgeschlagen | 2025-01-26 |
+| [ADR-0004](Artefacts/ADR/ADR-0004-gps-tracking-und-offline-funktionalitaet.md) | GPS-Tracking und Offline-Funktionalität | vorgeschlagen | 2025-01-26 |
+| [ADR-0005](Artefacts/ADR/ADR-0005-cloud-infrastruktur.md) | Cloud-Infrastruktur | vorgeschlagen | 2025-01-26 |
 
 ### Status-Legende
 
