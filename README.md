@@ -11,38 +11,38 @@
 </div>
 
 ## Übersicht
-### [Artefakte](https://github.com/im3an/EPWS2526AxtMoujtahidHavertz/tree/main/Artefacts)
-[**Domain Model**](https://github.com/im3an/EPWS2526AxtMoujtahidHavertz/tree/main/Artefacts/Domain%20Model)
-- [EPM Domain Model V1.0.pdf](https://github.com/im3an/EPWS2526AxtMoujtahidHavertz/blob/main/Artefacts/Domain%20Model/EPM%20Domain%20Model%20V1.0.pdf) 
-- [DomainModelV2.pdf](https://github.com/im3an/EPWS2526AxtMoujtahidHavertz/blob/main/Artefacts/Domain%20Model/DomainModelV2.pdf)
-- [DomainModelV2.1.pdf](https://github.com/im3an/EPWS2526AxtMoujtahidHavertz/blob/main/Artefacts/Domain%20Model/DomainModelV2.1.pdf)
-- [DomainModelV2.2.pdf](Artefacts/Domain%20Model/DomainModelV2.2.pdf)
+### [Artefakte](Artefacts)
+[**Domain Model**](Artefacts/Domain%20Model)
+- [EPM Domain Model V1.0.pdf](Artefacts/Domain%20Model/EPM%20Domain%20Model%20V1.0.pdf) 
+- [DomainModelV2.pdf](Artefacts/Domain%20Model/DomainModelV2.pdf)
+- [DomainModelV2.1.pdf](Artefacts/Domain%20Model/DomainModelV2.1.pdf)
+- [DomainModelV2.2.pdf](Artefacts/Domain%20Model/DomainModelV2.2.pdf)**-NEU**
 <a/>
 
-[**Recherche**](https://github.com/im3an/EPWS2526AxtMoujtahidHavertz/tree/main/Artefacts/Recherche)
-- [Recherche.md](https://github.com/im3an/EPWS2526AxtMoujtahidHavertz/blob/main/Artefacts/Recherche/Recherche.md)
+[**Recherche**](Artefacts/Recherche)
+- [Recherche.md](Artefacts/Recherche/Recherche.md)
 <a/>
 
-[**Retrospektiv**](https://github.com/im3an/EPWS2526AxtMoujtahidHavertz/tree/main/Artefacts/Retrospektiv)
-- [Retrospektiv_1.md](https://github.com/im3an/EPWS2526AxtMoujtahidHavertz/blob/main/Artefacts/Retrospektiv/Retrospektiv_1.md)
+[**Retrospektiv**](Artefacts/Retrospektiv)
+- [Retrospektiv_1.md](Artefacts/Retrospektiv/Retrospektiv_1.md)
 <a/>
 
-[**Stakeholder**](https://github.com/im3an/EPWS2526AxtMoujtahidHavertz/tree/main/Artefacts/Stakeholder)
-- [EPM Stakeholder V1.0.pdf](https://github.com/im3an/EPWS2526AxtMoujtahidHavertz/blob/main/Artefacts/Stakeholder/EPM%20Stakeholder%20V1.0.pdf)
+[**Stakeholder**](Artefacts/Stakeholder)
+- [EPM Stakeholder V1.0.pdf](Artefacts/Stakeholder/EPM%20Stakeholder%20V1.0.pdf)
 <a/>
 
 [**Szenario**]()
-- [Szenario.md](https://github.com/im3an/EPWS2526AxtMoujtahidHavertz/blob/main/Artefacts/Szenario/Szenario.md)
+- [Szenario.md](Artefacts/Szenario/Szenario.md)
 <a/>
 
-[**User Story**](https://github.com/im3an/EPWS2526AxtMoujtahidHavertz/tree/main/Artefacts/User%20Story)
-- [EP User Stories.pdf](https://github.com/im3an/EPWS2526AxtMoujtahidHavertz/blob/main/Artefacts/User%20Story/EP%20User%20Stories.pdf)
-- [Userstory_v1.md](https://github.com/im3an/EPWS2526AxtMoujtahidHavertz/blob/main/Artefacts/User%20Story/Userstory_v1.md)
+[**User Story**](Artefacts/User%20Story)
+- [EP User Stories.pdf](Artefacts/User%20Story/EP%20User%20Stories.pdf)
+- [Userstory_v1.md](Artefacts/User%20Story/Userstory_v1.md)
 <a/>
 
-[**Expose.md**](https://github.com/im3an/EPWS2526AxtMoujtahidHavertz/blob/main/Artefacts/Expose.md)<a/>
+[**Expose.md**](Artefacts/Expose.md)<a/>
 
-[**Technology-Bin.md**](https://github.com/im3an/EPWS2526AxtMoujtahidHavertz/blob/main/Artefacts/Technology-Bin.md) 
+[**Technology-Bin.md**](Artefacts/Technology-Bin.md) 
 
 ## ADR Übersicht **-NEU**
 
