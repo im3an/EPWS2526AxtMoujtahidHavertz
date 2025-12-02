@@ -15,7 +15,7 @@
 [**Domain Model**](https://github.com/im3an/EPWS2526AxtMoujtahidHavertz/tree/main/Artefacts/Domain%20Model)
 - [EPM Domain Model V1.0.pdf](https://github.com/im3an/EPWS2526AxtMoujtahidHavertz/blob/main/Artefacts/Domain%20Model/EPM%20Domain%20Model%20V1.0.pdf) 
 - [DomainModelV2.pdf](https://github.com/im3an/EPWS2526AxtMoujtahidHavertz/blob/main/Artefacts/Domain%20Model/DomainModelV2.pdf)
-- [DomainModelV2.1.pdf](https://github.com/im3an/EPWS2526AxtMoujtahidHavertz/blob/mainArtefacts/Domain%20Model/DomainModelV2.1.pdf) **-NEU**
+- [DomainModelV2.1.pdf](https://github.com/im3an/EPWS2526AxtMoujtahidHavertz/blob/mainArtefacts/Domain%20Model/DomainModelV2.1.pdf)
 <a/>
 
 [**Recherche**](https://github.com/im3an/EPWS2526AxtMoujtahidHavertz/tree/main/Artefacts/Recherche)
@@ -41,9 +41,9 @@
 
 [**Expose.md**](https://github.com/im3an/EPWS2526AxtMoujtahidHavertz/blob/main/Artefacts/Expose.md)<a/>
 
-[**Technology-Bin.md**](https://github.com/im3an/EPWS2526AxtMoujtahidHavertz/blob/main/Artefacts/Technology-Bin.md) **-NEU**
+[**Technology-Bin.md**](https://github.com/im3an/EPWS2526AxtMoujtahidHavertz/blob/main/Artefacts/Technology-Bin.md) 
 
-## ADR Übersicht
+## ADR Übersicht **-NEU**
 
 | ADR | Titel | Status | Datum |
 |-----|-------|--------|-------|
