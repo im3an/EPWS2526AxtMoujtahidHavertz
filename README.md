@@ -43,6 +43,24 @@
 
 [**Technology-Bin.md**](https://github.com/im3an/EPWS2526AxtMoujtahidHavertz/blob/main/Artefacts/Technology-Bin.md) **-NEU**
 
+## ADR Übersicht
+
+| ADR | Titel | Status | Datum |
+|-----|-------|--------|-------|
+| [ADR-0001](./ADR-0001-web-basierte-anwendung.md) | Web-basierte Anwendung | angenommen | 2025-01-26 |
+| [ADR-0002](./ADR-0002-kartenbibliothek-leaflet-openstreetmap.md) | Kartenbibliothek - Leaflet.js und OpenStreetMap | angenommen | 2025-01-26 |
+| [ADR-0003](./ADR-0003-backend-framework-spring-boot.md) | Backend-Framework - Spring Boot | vorgeschlagen | 2025-01-26 |
+| [ADR-0004](./ADR-0004-gps-tracking-und-offline-funktionalitaet.md) | GPS-Tracking und Offline-Funktionalität | vorgeschlagen | 2025-01-26 |
+| [ADR-0005](./ADR-0005-cloud-infrastruktur.md) | Cloud-Infrastruktur | vorgeschlagen | 2025-01-26 |
+
+### Status-Legende
+
+- **vorgeschlagen**: Die Entscheidung wurde vorgeschlagen, aber noch nicht final getroffen
+- **angenommen**: Die Entscheidung wurde getroffen und wird umgesetzt
+- **abgelehnt**: Die Entscheidung wurde verworfen
+- **ersetzt**: Die Entscheidung wurde durch eine andere ersetzt (siehe Superseded by)
+
+
 ### Artefakte im Miro
 [miro](https://miro.com/app/board/uXjVJyX-eOU=/)
 Enthalten sind folgende Artefakte:
