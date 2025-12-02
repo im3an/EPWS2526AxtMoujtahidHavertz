@@ -1,6 +1,7 @@
 # Changelog
 Changes since 1.12.2025
 - Added [ADRs](Artefacts/ADR)
+- Added [DomainModelV2.2.pdf](Artefacts/Domain Model/DomainModelV2.2.pdf)
 
 Changes since 17.11.2025:
 - Changes in the [README.md](README.md)

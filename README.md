@@ -15,7 +15,8 @@
 [**Domain Model**](https://github.com/im3an/EPWS2526AxtMoujtahidHavertz/tree/main/Artefacts/Domain%20Model)
 - [EPM Domain Model V1.0.pdf](https://github.com/im3an/EPWS2526AxtMoujtahidHavertz/blob/main/Artefacts/Domain%20Model/EPM%20Domain%20Model%20V1.0.pdf) 
 - [DomainModelV2.pdf](https://github.com/im3an/EPWS2526AxtMoujtahidHavertz/blob/main/Artefacts/Domain%20Model/DomainModelV2.pdf)
-- [DomainModelV2.1.pdf](https://github.com/im3an/EPWS2526AxtMoujtahidHavertz/blob/mainArtefacts/Domain%20Model/DomainModelV2.1.pdf)
+- [DomainModelV2.1.pdf](https://github.com/im3an/EPWS2526AxtMoujtahidHavertz/blob/main/Artefacts/Domain%20Model/DomainModelV2.1.pdf)
+- [DomainModelV2.2.pdf](Artefacts/Domain%20Model/DomainModelV2.2.pdf)
 <a/>
 
 [**Recherche**](https://github.com/im3an/EPWS2526AxtMoujtahidHavertz/tree/main/Artefacts/Recherche)
