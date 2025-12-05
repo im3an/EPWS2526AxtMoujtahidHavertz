@@ -117,4 +117,3 @@ Diese Entscheidung ermöglicht eine schnelle Entwicklung, breite Zugänglichkeit
 - Browser-Kompatibilität muss getestet werden (insbesondere ältere Browser)
 - PWA-Installation funktioniert nicht auf allen Geräten gleich (iOS hat Einschränkungen)
 - Offline-Synchronisation muss sorgfältig implementiert werden, um Datenverlust zu vermeiden
-

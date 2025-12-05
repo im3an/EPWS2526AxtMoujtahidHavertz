@@ -1,6 +1,6 @@
 # ADR-0003: Backend-Framework - Spring Boot
 
-**Status:** angenommen
+**Status:** vorgeschlagen
 
 **Datum:** 2025-01-26
 
@@ -124,4 +124,3 @@ Diese Entscheidung basiert auf der Robustheit, dem umfangreichen Ökosystem und 
 - Konfiguration von Datenbankverbindungen und JPA kann initial aufwändig sein
 - Spring Security Setup erfordert sorgfältige Konfiguration für API-Sicherheit
 - Deployment auf Server erfordert Java-Runtime-Umgebung
-

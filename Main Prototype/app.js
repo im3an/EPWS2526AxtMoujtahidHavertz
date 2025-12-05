@@ -1540,28 +1540,33 @@ class MapApp {
     async saveAnnotation(annotation) {
         if (!this.db) return;
         
-        const transaction = this.db.transaction(['annotations'], 'readwrite');
-        const store = transaction.objectStore('annotations');
-        
-        // Convert layer to GeoJSON for storage
-        const geoJson = this.layerToGeoJSON(annotation.layer);
-        const data = {
-            id: annotation.id,
-            type: annotation.type,
-            name: annotation.name,
-            description: annotation.description || '',
-            color: annotation.color || this.currentColor,
-            priority: annotation.priority || 'normal',
-            searchStatus: annotation.searchStatus || 'not-searched',
-            assignedTo: annotation.assignedTo || '',
-            assignedType: annotation.assignedType || 'user',
-            geoJson: geoJson,
-            area: annotation.area,
-            length: annotation.length,
-            createdAt: annotation.createdAt
-        };
-        
-        await store.put(data);
+        return new Promise((resolve, reject) => {
+            const transaction = this.db.transaction(['annotations'], 'readwrite');
+            const store = transaction.objectStore('annotations');
+            
+            // Convert layer to GeoJSON for storage
+            const geoJson = this.layerToGeoJSON(annotation.layer);
+            const data = {
+                id: annotation.id,
+                type: annotation.type,
+                name: annotation.name,
+                description: annotation.description || '',
+                color: annotation.color || this.currentColor,
+                priority: annotation.priority || 'normal',
+                searchStatus: annotation.searchStatus || 'not-searched',
+                assignedTo: annotation.assignedTo || '',
+                assignedType: annotation.assignedType || 'user',
+                geoJson: geoJson,
+                area: annotation.area,
+                length: annotation.length,
+                createdAt: annotation.createdAt
+            };
+            
+            const request = store.put(data);
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject(request.error);
+            transaction.onerror = () => reject(transaction.error);
+        });
     }
     
     async loadAnnotations() {
@@ -1637,9 +1642,18 @@ class MapApp {
             
             // Delete from IndexedDB
             if (this.db) {
-                const transaction = this.db.transaction(['annotations'], 'readwrite');
-                const store = transaction.objectStore('annotations');
-                await store.delete(id);
+                try {
+                    await new Promise((resolve, reject) => {
+                        const transaction = this.db.transaction(['annotations'], 'readwrite');
+                        const store = transaction.objectStore('annotations');
+                        const request = store.delete(id);
+                        request.onsuccess = () => resolve(request.result);
+                        request.onerror = () => reject(request.error);
+                        transaction.onerror = () => reject(transaction.error);
+                    });
+                } catch (error) {
+                    console.error('Error deleting annotation from IndexedDB:', error);
+                }
             }
             
             this.updateAnnotationsList();
@@ -1654,25 +1668,40 @@ class MapApp {
     async clearAllAnnotations() {
         if (!this.db) return;
         
-        const transaction = this.db.transaction(['annotations'], 'readwrite');
-        const store = transaction.objectStore('annotations');
-        await store.clear();
+        return new Promise((resolve, reject) => {
+            const transaction = this.db.transaction(['annotations'], 'readwrite');
+            const store = transaction.objectStore('annotations');
+            const request = store.clear();
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject(request.error);
+            transaction.onerror = () => reject(transaction.error);
+        });
     }
     
     async saveTrackingPoint(point) {
         if (!this.db) return;
         
-        const transaction = this.db.transaction(['trackingPoints'], 'readwrite');
-        const store = transaction.objectStore('trackingPoints');
-        await store.add(point);
+        return new Promise((resolve, reject) => {
+            const transaction = this.db.transaction(['trackingPoints'], 'readwrite');
+            const store = transaction.objectStore('trackingPoints');
+            const request = store.add(point);
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject(request.error);
+            transaction.onerror = () => reject(transaction.error);
+        });
     }
     
     async clearAllTrackingPoints() {
         if (!this.db) return;
         
-        const transaction = this.db.transaction(['trackingPoints'], 'readwrite');
-        const store = transaction.objectStore('trackingPoints');
-        await store.clear();
+        return new Promise((resolve, reject) => {
+            const transaction = this.db.transaction(['trackingPoints'], 'readwrite');
+            const store = transaction.objectStore('trackingPoints');
+            const request = store.clear();
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject(request.error);
+            transaction.onerror = () => reject(transaction.error);
+        });
     }
     
     async loadTrackingPoints() {

@@ -1,6 +1,6 @@
 # ADR-0002: Kartenbibliothek - Leaflet.js und OpenStreetMap
 
-**Status:** angenommen
+**Status:** vorgeschlagen
 
 **Datum:** 2025-01-26
 
