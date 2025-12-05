@@ -1,4 +1,5 @@
 // Simple Map v2 - Map with markers, zones and circles
+// Ui is shit btw 
 
 let map;
 let markers = [];
@@ -33,13 +34,11 @@ function initMap() {
         if (currentTool === 'marker') {
             addMarker(e.latlng);
         }
-    });
-    
-    // Initialize tool buttons
+    }); 
+
     initTools();
 }
 
-// Initialize tool selection
 function initTools() {
     const markerBtn = document.getElementById('tool-marker');
     const polygonBtn = document.getElementById('tool-polygon');
@@ -50,17 +49,14 @@ function initTools() {
     circleBtn.addEventListener('click', () => setTool('circle'));
 }
 
-// Set active tool
+
 function setTool(tool) {
     currentTool = tool;
     
-    // Update button states
     document.querySelectorAll('.tool-btn').forEach(btn => btn.classList.remove('active'));
     
-    // Disable all drawing modes
     map.pm.disableDraw();
     
-    // Enable selected tool
     if (tool === 'marker') {
         document.getElementById('tool-marker').classList.add('active');
     } else if (tool === 'polygon') {
@@ -78,12 +74,10 @@ function setTool(tool) {
     }
 }
 
-// Add marker at position
 function addMarker(latlng) {
     const marker = L.marker(latlng).addTo(map);
     markers.push(marker);
 }
 
-// Initialize when page loads
 initMap();
 

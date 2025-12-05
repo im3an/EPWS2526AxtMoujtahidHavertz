@@ -1,4 +1,5 @@
 // Service Worker for FindMyPet
+// Old Version of the Service Worker but working :D
 // Implements offline functionality (ADR-0004)
 
 const CACHE_NAME = 'findmypet-v1';
