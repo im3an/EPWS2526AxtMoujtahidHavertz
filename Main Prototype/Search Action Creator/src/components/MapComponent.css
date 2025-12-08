@@ -1,0 +1,117 @@
+.map-component {
+  margin: 1rem 0;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #ddd;
+}
+
+.map-controls {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background: #f9f9f9;
+  border-radius: 6px;
+}
+
+.address-search {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.address-input {
+  flex: 1;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.address-input:focus {
+  outline: none;
+  border-color: #624EEF;
+  box-shadow: 0 0 0 3px rgba(98, 78, 239, 0.1);
+}
+
+.search-btn {
+  padding: 0.75rem 1rem;
+  background: #624EEF;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  transition: background-color 0.2s;
+}
+
+.search-btn:hover {
+  background: #4d3dd4;
+}
+
+.priority-selector {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.priority-selector span {
+  font-weight: 500;
+  color: #333;
+}
+
+.priority-btn {
+  padding: 0.5rem 1rem;
+  border: 1px solid #ddd;
+  background: white;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+
+.priority-btn:hover {
+  background: #f0f0f0;
+}
+
+.priority-btn.active {
+  background: #624EEF;
+  color: white;
+  border-color: #624EEF;
+}
+
+.priority-btn.priority-high.active {
+  background: #ff4444;
+  border-color: #ff4444;
+}
+
+.priority-btn.priority-low.active {
+  background: #888888;
+  border-color: #888888;
+}
+
+.map-hint {
+  margin: 0.5rem 0 0 0;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.area-popup {
+  text-align: center;
+}
+
+.delete-area-btn {
+  margin-top: 0.5rem;
+  padding: 0.25rem 0.75rem;
+  background: #ff4444;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.delete-area-btn:hover {
+  background: #cc0000;
+}
+

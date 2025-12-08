@@ -1,0 +1,36 @@
+.map-preview {
+  margin: 1rem 0;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  background: white;
+}
+
+.map-preview-header {
+  padding: 0.75rem 1rem;
+  background: #f9f9f9;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s;
+}
+
+.map-preview-header:hover {
+  background: #f0f0f0;
+}
+
+.map-preview-title {
+  font-weight: 500;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.map-preview-content {
+  transition: height 0.3s;
+}
+
+.map-preview.expanded .map-preview-content {
+  border-top: 1px solid #ddd;
+}
+
