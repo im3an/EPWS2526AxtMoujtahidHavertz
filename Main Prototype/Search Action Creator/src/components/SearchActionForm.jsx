@@ -98,8 +98,6 @@ function SearchActionForm({ action, onSave, onCancel }) {
             >
               <option value="Katze">Katze</option>
               <option value="Hund">Hund</option>
-              <option value="Vogel">Vogel</option>
-              <option value="Kaninchen">Kaninchen</option>
               <option value="Andere">Andere</option>
             </select>
           </div>

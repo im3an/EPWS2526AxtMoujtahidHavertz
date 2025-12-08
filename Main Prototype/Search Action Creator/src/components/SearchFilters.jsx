@@ -54,8 +54,6 @@ function SearchFilters({ filters, onFiltersChange }) {
             <option value="">Alle</option>
             <option value="Katze">Katze</option>
             <option value="Hund">Hund</option>
-            <option value="Vogel">Vogel</option>
-            <option value="Kaninchen">Kaninchen</option>
             <option value="Andere">Andere</option>
           </select>
         </div>
