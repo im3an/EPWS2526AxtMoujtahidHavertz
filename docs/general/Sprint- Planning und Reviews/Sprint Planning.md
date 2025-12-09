@@ -4,6 +4,7 @@
 
 - Feedback von Audit 2 umsetzen
 - Use Cases erstellen
+- HTAs (Oder anlehnung an HTAs) zu den wichtigsten Tasks.
 - POCs erstellen
 - Github Struktur überarbeiten
 - Teamcharta und Selbsteinschätzung erarbeiten
