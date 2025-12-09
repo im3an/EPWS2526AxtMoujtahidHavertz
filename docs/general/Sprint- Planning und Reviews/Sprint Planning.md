@@ -2,6 +2,12 @@
 
 ## Sprint 2.1 - 15.12.2025
 
+- Feedback von Audit 2 umsetzen
+- Use Cases erstellen
+- POCs erstellen
+- Github Struktur überarbeiten
+- Teamcharta und Selbsteinschätzung erarbeiten
+
 - *Hier Bitte rein schreiben was erarbeitet werden soll*
 
 ## Sprint 2.2 - 22.12.2025
