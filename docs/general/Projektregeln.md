@@ -10,8 +10,6 @@
 - Open Space Pflicht
 - Bei Abwesenheit von Meetings/Open Space frühzeitig Bescheid geben.
 - Bei Dringlichkeit "@User" in WhatsApp verwenden.
-- Dateien/Artefakte/Änderungen regelmäßig pushen.
-- GitHub Issues verwenden.
 - Feedback zu Artefakten einholen. Artefakte sollten nicht immer auf Basis einzelner erarbeitet werden.
 - Allgemein kommunizieren und Probleme ansprechen.
 
@@ -21,5 +19,7 @@
 
 - Datein im besten Fall immer in Markdown pushen.
 - Dateien wie Diagramme immer in der Urpsrungsform und in PDF-Format pushen.
+- Dateien/Artefakte/Änderungen regelmäßig pushen.
+- GitHub Issues verwenden.
 
 - *Hier bitte weitere Regeln festlegen.*
