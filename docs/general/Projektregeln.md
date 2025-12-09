@@ -21,5 +21,6 @@
 - Dateien wie Diagramme immer in der Urpsrungsform und in PDF-Format pushen.
 - Dateien/Artefakte/Änderungen regelmäßig pushen.
 - GitHub Issues verwenden.
+- Ordentliche Commit Messages definieren.
 
 - *Hier bitte weitere Regeln festlegen.*
