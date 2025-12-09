@@ -24,3 +24,12 @@
 - Ordentliche Commit Messages definieren.
 
 - *Hier bitte weitere Regeln festlegen.*
+
+## Teamrollen
+
+### Louis 
+- Videoabgabe für Audits
+
+### Imran
+
+### Aaron
