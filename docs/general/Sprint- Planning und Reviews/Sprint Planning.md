@@ -13,6 +13,15 @@
 
 ## Sprint 2.2 - 22.12.2025
 
+- POC: Suche abschließen
+- POC: Leute einladen
+- POC: Wie wird ein Gebiet als gesucht markiert?
+- Use Cases (Aaron)
+- Systemkontext/Architekturdiagram (Imran)
+- Einladungs Modellierung/User Rollen / User Architektur (Imran)
+- UML Diagram anfangen (Aaron)
+- Mehr POCs? (Aaron)
+
 - *Hier Bitte rein schreiben was erarbeitet werden soll*
 
 ## Sprint 2.3 - 29.12.2025
