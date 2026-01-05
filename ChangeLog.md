@@ -1,4 +1,9 @@
 # Changelog
+Changes since 26.01.2025:
+- Added [Systemkontext V2.0](Artefacts/Systemkontext/v02/Systemkontext_V2.0.md) - Verbesserte Systemkontext-Dokumentation mit detaillierten Mermaid-Diagrammen
+- Reorganized Systemkontext files into versioned folders (v01, v02)
+- Exported system context diagrams as PNG images for better compatibility
+
 Changes since 1.12.2025
 - Added [ADRs](Artefacts/ADR)
 - Added [DomainModelV2.2.pdf](Artefacts/Domain%20Model/DomainModelV2.2.pdf)
