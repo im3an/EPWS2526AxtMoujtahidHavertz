@@ -1,4 +1,7 @@
 # Changelog
+Changes since 11.01.2025
+- added [Backend](Backend)
+
 Changes since 26.01.2025:
 - Added [Systemkontext V2.0](Artefacts/Systemkontext/v02/Systemkontext_V2.0.md) - Verbesserte Systemkontext-Dokumentation mit detaillierten Mermaid-Diagrammen
 - Reorganized Systemkontext files into versioned folders (v01, v02)
