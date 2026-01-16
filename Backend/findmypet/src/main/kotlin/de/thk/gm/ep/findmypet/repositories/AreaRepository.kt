@@ -9,4 +9,5 @@ import java.util.UUID
 @Repository
 interface AreaRepository: CrudRepository<Area, UUID> {
     fun findByMissingReport(missingReport: MissingReport): List<Area>
+    fun findByMissingReportAndId(missingReport: MissingReport, id: UUID): Area?
 }

@@ -4,6 +4,15 @@ import jakarta.persistence.Entity
 import jakarta.persistence.Id
 import java.util.UUID
 
+
 @Entity
-class MissingReport(val petName: String,val location: Pair<Double, Double>,val description: String,val images:String?,val public: Boolean,val ownerId: UUID,@Id val id: UUID = UUID.randomUUID()) {
+class MissingReport(
+    var petName: String,
+    var location: Coordinate,
+    var description: String,
+    var images:String?,
+    var public: Boolean,
+    val ownerId: UUID,
+) {
+    @Id val id: UUID = UUID.randomUUID()
 }
