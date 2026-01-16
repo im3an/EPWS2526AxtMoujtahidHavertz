@@ -6,5 +6,8 @@ import java.io.Serializable
 import java.util.UUID
 
 @Embeddable
-class ParticipantsId(@Column(name = "account_id") val accountId: UUID, @Column(name = "report_id") val reportid: UUID): Serializable{
+class ParticipantsId(
+    @Column(name = "account_id") val accountId: UUID,
+    @Column(name = "report_id") val reportId: UUID
+): Serializable{
 }

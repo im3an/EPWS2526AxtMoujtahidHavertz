@@ -2,8 +2,10 @@ package de.thk.gm.ep.findmypet.services
 
 import de.thk.gm.ep.findmypet.models.Account
 import de.thk.gm.ep.findmypet.repositories.AccountRepository
+import org.springframework.stereotype.Service
 import java.util.*
 
+@Service
 class AccountServiceImpl(
     private val accountRepository: AccountRepository
 ): AccountService {

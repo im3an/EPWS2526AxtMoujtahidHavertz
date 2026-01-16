@@ -13,22 +13,23 @@ import org.springframework.web.server.ResponseStatusException
 import java.util.UUID
 
 @RestController
-@RequestMapping("/participants")
+@RequestMapping("api/v1/participants")
 class ParticipantsRestController(
     private val participantsService: ParticipantsService,
     private val missingReportService: MissingReportService,
     private val accountService: AccountService
 ) {
 
-    @PostMapping
+    @PostMapping("/{accountId}/{missingReportId}")
     fun saveParticipant(
-        @Valid @RequestBody participantsDto: ParticipantsDto
+        @PathVariable accountId: UUID,
+        @PathVariable missingReportId: UUID,
     ): Participants {
-        val missingReport = missingReportService.getById(participantsDto.missingReportId)
-        val account = accountService.getById(participantsDto.accountId)
+        val missingReport = missingReportService.getById(missingReportId)
+        val account = accountService.getById(accountId)
         if (missingReport != null && account != null) {
             val participants = Participants(
-                ParticipantsId(participantsDto.accountId,participantsDto.missingReportId),
+                ParticipantsId(accountId,missingReportId),
                 account,
                 missingReport
             )

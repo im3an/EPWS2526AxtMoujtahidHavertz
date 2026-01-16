@@ -25,7 +25,8 @@ class MissingReportsRestController(
             missingReportDto.description,
             "Platzhalter",
             missingReportDto.public,
-            UUID.randomUUID() //Platzhalter später wird die ID über Principal abgerufen (Spring Boot Security)
+            UUID.randomUUID(),
+            missingReportDto.status//Platzhalter später wird die ID über Principal abgerufen (Spring Boot Security)
         )
         missingReportService.save(missingReport)
         return missingReport
@@ -55,6 +56,8 @@ class MissingReportsRestController(
             missingReport.description = missingReportDto.description
             missingReport.public = missingReportDto.public
             missingReport.location = missingReportDto.location
+            missingReport.status = missingReportDto.status
+            missingReportService.save(missingReport)
         } ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
     }
 

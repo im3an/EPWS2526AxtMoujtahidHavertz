@@ -5,6 +5,7 @@ import de.thk.gm.ep.findmypet.models.Area
 import de.thk.gm.ep.findmypet.models.Coordinate
 import de.thk.gm.ep.findmypet.services.AreaService
 import de.thk.gm.ep.findmypet.services.MissingReportService
+import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
@@ -19,9 +20,10 @@ class AreaRestController(
 
     @PostMapping
     fun saveArea(
-        @RequestBody areaDto: AreaDto
+        @PathVariable("missingReportId") missingReportId: UUID,
+        @Valid @RequestBody areaDto: AreaDto
     ): Area {
-        val missingReport = missingReportService.getById(areaDto.missingReportId)
+        val missingReport = missingReportService.getById(missingReportId)
         return missingReport?.let {
             val area = Area(
                 areaDto.searched,
@@ -64,7 +66,7 @@ class AreaRestController(
     fun updateArea(
         @PathVariable("missingReportId") missingReportId: UUID,
         @PathVariable("areaId") areaId: UUID,
-        @RequestBody areaDto: AreaDto
+        @Valid @RequestBody areaDto: AreaDto
     ){
         val missingReport = missingReportService.getById(missingReportId)
         missingReport?.let { it ->

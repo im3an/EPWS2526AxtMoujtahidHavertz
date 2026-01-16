@@ -7,7 +7,8 @@ class MissingReportDto(
     @NotNull val petName: String,
     val description: String,
     val public: Boolean,
-    @NotNull val location: Coordinate
+    @NotNull val location: Coordinate,
+    val status: Boolean = true
 ) {
 
 

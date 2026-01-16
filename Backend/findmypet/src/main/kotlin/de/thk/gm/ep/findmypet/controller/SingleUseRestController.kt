@@ -20,7 +20,7 @@ class SingleUseRestController(
         @Valid @RequestBody singleUseDto: SingleUseDto
     ): SingleUse {
         val singleUse = SingleUse(
-            singleUseDto.creationDate,
+            singleUseDto.name,
             singleUseDto.nr
         )
         return singleUseService.save(singleUse)

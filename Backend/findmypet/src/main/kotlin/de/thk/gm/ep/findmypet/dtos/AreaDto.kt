@@ -10,6 +10,4 @@ class AreaDto(
     @NotNull val searched: Boolean,
     val lastSearch: LocalDateTime?,
     @NotNull val coordinates: List<CoordinateDto>,
-    @NotNull @ManyToOne val missingReportId: UUID
-) {
-}
+)

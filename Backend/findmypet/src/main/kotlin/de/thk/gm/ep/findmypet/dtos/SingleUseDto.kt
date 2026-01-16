@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotNull
 import java.time.LocalDate
 
 class SingleUseDto(
-    @NotNull name: String,
+    @NotNull val name: String,
     @NotNull val nr: Int,
     creationDate: String = LocalDate.now().toString()
 ) : AccountDto(name, creationDate)
