@@ -28,7 +28,7 @@ class SingleUseServiceImpl(
     override fun save(singleUseRequestDto: SingleUseRequestDto): SingleUseResponseDto {
         val singleUse = SingleUse(
             name = singleUseRequestDto.name,
-            nr = singleUseRequestDto.nr
+            nr = generatePin()
         )
 
         return singleUseRepository.save(singleUse).toResponseDto()
@@ -38,7 +38,6 @@ class SingleUseServiceImpl(
         val singleUse = singleUseRepository.findByIdOrNull(singleUseId) ?: throw NoSuchElementException("SingleUse with id $singleUseId not found")
         singleUse.apply {
             name = singleUseRequestDto.name
-            nr = singleUseRequestDto.nr
         }
 
         return singleUseRepository.save(singleUse).toResponseDto()
@@ -46,6 +45,10 @@ class SingleUseServiceImpl(
 
     override fun delete(singleUseId: UUID) {
         singleUseRepository.deleteById(singleUseId)
+    }
+
+    private fun generatePin(): Int {
+        return (1000..9999).random()
     }
 
 
