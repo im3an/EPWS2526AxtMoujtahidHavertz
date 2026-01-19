@@ -6,6 +6,6 @@ import de.thk.gm.ep.findmypet.dtos.JoinRequestDto
 import de.thk.gm.ep.findmypet.dtos.SingleUseResponseDto
 
 interface InvitationService {
-    fun joinByTokenAsSingleUseAccount(joinRequestDto: JoinRequestDto): SingleUseResponseDto
+    fun joinByTokenAsSingleUseAccount(joinRequestDto: JoinRequestDto, token: String): SingleUseResponseDto
     fun createInvitation(invitationRequestDto: InvitationRequestDto): InvitationResponseDto
 }

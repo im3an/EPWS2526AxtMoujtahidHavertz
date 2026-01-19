@@ -10,7 +10,8 @@ data class InvitationResponseDto (
     val missingReportId: UUID,
     val id: UUID,
     val expirationDate: LocalDateTime,
+    val invitationUrl: String = ""
 
 )
 
-fun Invitation.toResponseDto() = InvitationResponseDto(isActive, token, missingReport.id, id!!, expirationDate)
+fun Invitation.toResponseDto(url: String) = InvitationResponseDto(isActive, token, missingReport.id, id!!, expirationDate, url)

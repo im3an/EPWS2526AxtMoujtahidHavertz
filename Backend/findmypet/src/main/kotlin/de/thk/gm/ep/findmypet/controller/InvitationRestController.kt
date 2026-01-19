@@ -1,4 +1,4 @@
-package de.thk.gm.ep.findmypet.controllers
+package de.thk.gm.ep.findmypet.controller
 
 import de.thk.gm.ep.findmypet.dtos.*
 import de.thk.gm.ep.findmypet.services.InvitationService
@@ -14,12 +14,17 @@ class InvitationRestController(
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun createInvitation(@Valid @RequestBody dto: InvitationRequestDto): InvitationResponseDto {
+    fun createInvitation(
+        @Valid @RequestBody dto: InvitationRequestDto
+    ): InvitationResponseDto {
         return invitationService.createInvitation(dto)
     }
 
-    @PostMapping("/join")
-    fun joinViaToken(@Valid @RequestBody dto: JoinRequestDto): SingleUseResponseDto {
-        return invitationService.joinByTokenAsSingleUseAccount(dto)
+    @PostMapping("/join/{token}")
+    fun joinViaToken(
+        @Valid @RequestBody dto: JoinRequestDto,
+        @PathVariable("token") token: String
+    ): SingleUseResponseDto {
+        return invitationService.joinByTokenAsSingleUseAccount(dto, token)
     }
 }
