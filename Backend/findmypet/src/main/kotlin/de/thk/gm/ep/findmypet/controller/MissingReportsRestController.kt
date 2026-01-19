@@ -42,7 +42,7 @@ class MissingReportsRestController(
         @PathVariable("missingReportId") missingReportId: UUID,
         @Valid @RequestBody missingReportRequestDto: MissingReportRequestDto
     ): MissingReportResponseDto?{
-        return missingReportService.save(missingReportRequestDto)
+        return missingReportService.update(missingReportRequestDto, missingReportId)
     }
 
     //WICHTIG!!

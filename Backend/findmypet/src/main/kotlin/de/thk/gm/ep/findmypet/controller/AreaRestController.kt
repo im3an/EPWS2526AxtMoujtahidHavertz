@@ -10,7 +10,7 @@ import org.springframework.web.server.ResponseStatusException
 import java.util.*
 
 @RestController
-@RequestMapping("/api/v1/missingReports/{missingReportId}/areas")
+@RequestMapping("/api/v1/missing-reports/{missingReportId}/areas")
 class AreaRestController(
     private val areaService: AreaService,
 ) {
