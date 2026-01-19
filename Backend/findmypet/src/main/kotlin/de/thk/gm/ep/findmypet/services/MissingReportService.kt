@@ -1,15 +1,15 @@
 package de.thk.gm.ep.findmypet.services
 
-import de.thk.gm.ep.findmypet.models.MissingReport
-import org.springframework.stereotype.Service
+import de.thk.gm.ep.findmypet.dtos.MissingReportRequestDto
+import de.thk.gm.ep.findmypet.dtos.MissingReportResponseDto
 import java.util.*
 
-@Service
 interface MissingReportService {
-    fun getAll(): List<MissingReport>
-    fun getById(id: UUID): MissingReport?
-    fun save(missingReport: MissingReport)
-    fun delete(missingReport: MissingReport)
-    fun getByOwnerId(ownerId: UUID): List<MissingReport>
+    fun getAll(): List<MissingReportResponseDto>
+    fun getById(id: UUID): MissingReportResponseDto?
+    fun save(missingReportRequestDto: MissingReportRequestDto): MissingReportResponseDto
+    fun update(missingReportRequestDto: MissingReportRequestDto, missingReportId: UUID): MissingReportResponseDto
+    fun delete(missingReportId: UUID)
+    fun getByOwnerId(ownerId: UUID): List<MissingReportResponseDto>
 
 }

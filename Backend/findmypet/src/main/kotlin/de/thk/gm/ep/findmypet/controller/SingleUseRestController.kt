@@ -1,7 +1,7 @@
 package de.thk.gm.ep.findmypet.controller
 
-import de.thk.gm.ep.findmypet.dtos.SingleUseDto
-import de.thk.gm.ep.findmypet.models.SingleUse
+import de.thk.gm.ep.findmypet.dtos.SingleUseRequestDto
+import de.thk.gm.ep.findmypet.dtos.SingleUseResponseDto
 import de.thk.gm.ep.findmypet.services.SingleUseService
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
@@ -16,46 +16,37 @@ class SingleUseRestController(
 ) {
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     fun saveSingleUse(
-        @Valid @RequestBody singleUseDto: SingleUseDto
-    ): SingleUse {
-        val singleUse = SingleUse(
-            singleUseDto.name,
-            singleUseDto.nr
-        )
-        return singleUseService.save(singleUse)
+        @Valid @RequestBody singleUseRequestDto: SingleUseRequestDto
+    ): SingleUseResponseDto {
+       return singleUseService.save(singleUseRequestDto)
     }
 
     @GetMapping
-    fun getSingleUses(): List<SingleUse> {
+    fun getSingleUses(): List<SingleUseResponseDto> {
         return singleUseService.getAll()
     }
 
     @GetMapping("/{singleUseId}")
     fun getSingleUse(
         @PathVariable("singleUseId") singleUseId: UUID
-    ): SingleUse {
+    ): SingleUseResponseDto {
         return singleUseService.getById(singleUseId) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
     }
 
     @PutMapping("/{singleUseId}")
     fun updateSingleUse(
         @PathVariable("singleUseId") singleUseId: UUID,
-        @Valid @RequestBody singleUseDto: SingleUseDto
-    ){
-        val singleUse = singleUseService.getById(singleUseId)
-        singleUse?.let {
-            it.nr = singleUseDto.nr
-            singleUseService.save(singleUse)
-        } ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "SingleUse not found")
+        @Valid @RequestBody singleUseRequestDto: SingleUseRequestDto
+    ): SingleUseResponseDto {
+        return singleUseService.update(singleUseRequestDto, singleUseId)
     }
 
     @DeleteMapping("/{singleUseId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     fun deleteSingleUse(@PathVariable("singleUseId") singleUseId: UUID) {
-        val singleUse = singleUseService.getById(singleUseId)
-        singleUse?.let {
-            singleUseService.delete(it)
-        } ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "SingleUse not found")
+        singleUseService.delete(singleUseId)
     }
 
 }

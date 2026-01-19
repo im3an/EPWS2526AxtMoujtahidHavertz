@@ -1,10 +1,8 @@
 package de.thk.gm.ep.findmypet.controller
 
-import de.thk.gm.ep.findmypet.dtos.AreaDto
-import de.thk.gm.ep.findmypet.models.Area
-import de.thk.gm.ep.findmypet.models.Coordinate
+import de.thk.gm.ep.findmypet.dtos.AreaRequestDto
+import de.thk.gm.ep.findmypet.dtos.AreaResponseDto
 import de.thk.gm.ep.findmypet.services.AreaService
-import de.thk.gm.ep.findmypet.services.MissingReportService
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
@@ -15,105 +13,58 @@ import java.util.*
 @RequestMapping("/api/v1/missingReports/{missingReportId}/areas")
 class AreaRestController(
     private val areaService: AreaService,
-    private val missingReportService: MissingReportService
 ) {
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     fun saveArea(
         @PathVariable("missingReportId") missingReportId: UUID,
-        @Valid @RequestBody areaDto: AreaDto
-    ): Area {
-        val missingReport = missingReportService.getById(missingReportId)
-        return missingReport?.let {
-            val area = Area(
-                areaDto.searched,
-                areaDto.lastSearch,
-                areaDto.coordinates.map {
-                    Coordinate(it.latitude, it.longitude)
-                },
-                missingReport
-            )
-            areaService.save(area)
-
-        } ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Missing report not found")
-
+        @Valid @RequestBody areaRequestDto: AreaRequestDto
+    ): AreaResponseDto {
+       return areaService.save(areaRequestDto, missingReportId)
     }
 
     @GetMapping
     fun getAreas(
         @PathVariable("missingReportId") missingReportId: UUID
-    ): List<Area> {
-        val missingReport = missingReportService.getById(missingReportId)
-        missingReport?.let {
-            return areaService.getByMissingReport(it)
-        } ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Missing report not found")
-
+    ): List<AreaResponseDto> {
+       return areaService.getAll()
     }
 
     @GetMapping("{areaId}")
     fun getArea(
         @PathVariable("missingReportId") missingReportId: UUID,
         @PathVariable("areaId") areaId: UUID,
-    ): Area {
-        val missingReport = missingReportService.getById(missingReportId)
-        missingReport?.let {
-            val areaToReturn = areaService.getByMissingReportAndId(it, areaId)
-            return areaToReturn ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Area not found")
-        } ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Missing report not found")
+    ): AreaResponseDto {
+        return areaService.getById(areaId) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
     }
 
     @PutMapping("{areaId}")
     fun updateArea(
         @PathVariable("missingReportId") missingReportId: UUID,
         @PathVariable("areaId") areaId: UUID,
-        @Valid @RequestBody areaDto: AreaDto
-    ){
-        val missingReport = missingReportService.getById(missingReportId)
-        missingReport?.let { it ->
-            val areaToUpdate = areaService.getByMissingReportAndId(it, areaId)
-            areaToUpdate?.let {
-                areaToUpdate.searched = areaDto.searched
-                areaToUpdate.lastSearch = areaDto.lastSearch
-                areaToUpdate.coordinates = areaDto.coordinates.map {
-                    Coordinate(it.latitude, it.longitude)
-                }
-
-                areaService.save(areaToUpdate)
-            } ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Area not found")
-        } ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Missing report not found")
-
+        @Valid @RequestBody areaRequestDto: AreaRequestDto
+    ): AreaResponseDto? {
+        return areaService.update(areaRequestDto, missingReportId, areaId)
     }
 
     @DeleteMapping()
     fun deleteAreas(
         @PathVariable("missingReportId") missingReportId: UUID,
     ){
-        val missingReport = missingReportService.getById(missingReportId)
-        missingReport?.let {
-            val areasToDelete = areaService.getByMissingReport(it)
-            for (area in areasToDelete) {
-                areaService.delete(area)
-            }
-
-        } ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Missing report not found")
+        for (area in areaService.getByMissingReport(missingReportId)){
+        areaService.delete(area.id)
+        }
     }
 
     @DeleteMapping("{areaId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     fun deleteArea(
         @PathVariable("missingReportId") missingReportId: UUID,
         @PathVariable("areaId") areaId: UUID,
     ){
-        val missingReport = missingReportService.getById(missingReportId)
-        missingReport?.let {
-            val areaToDelete = areaService.getByMissingReportAndId(it, areaId)
-            areaToDelete?.let {
-            areaService.delete(areaToDelete)
-            } ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Area not found")
-        } ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Missing report not found")
+        areaService.delete(areaId)
     }
-
-
-
 
 }
 

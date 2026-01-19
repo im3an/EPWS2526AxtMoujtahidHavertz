@@ -1,16 +1,17 @@
 package de.thk.gm.ep.findmypet.services
 
-import de.thk.gm.ep.findmypet.models.SingleUse
-import org.springframework.stereotype.Service
+import de.thk.gm.ep.findmypet.dtos.SingleUseRequestDto
+import de.thk.gm.ep.findmypet.dtos.SingleUseResponseDto
+
 import java.util.UUID
 
-@Service
 interface SingleUseService {
 
-    fun getAll(): List<SingleUse>
-    fun getById(id:UUID):SingleUse?
-    fun getByName(name:String):SingleUse?
-    fun save(singleUse: SingleUse): SingleUse
-    fun delete(singleUse: SingleUse)
+    fun getAll(): List<SingleUseResponseDto>
+    fun getById(id:UUID):SingleUseResponseDto?
+    fun getByName(name:String):SingleUseResponseDto?
+    fun save(singleUseRequestDto: SingleUseRequestDto): SingleUseResponseDto
+    fun update(singleUseRequestDto: SingleUseRequestDto, singleUseId: UUID): SingleUseResponseDto
+    fun delete(singleUseId: UUID)
 
 }

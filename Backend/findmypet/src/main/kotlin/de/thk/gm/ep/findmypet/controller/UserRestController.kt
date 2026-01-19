@@ -1,7 +1,7 @@
 package de.thk.gm.ep.findmypet.controller
 
-import de.thk.gm.ep.findmypet.dtos.UserDto
-import de.thk.gm.ep.findmypet.models.User
+import de.thk.gm.ep.findmypet.dtos.UserRequestDto
+import de.thk.gm.ep.findmypet.dtos.UserResponseDto
 import de.thk.gm.ep.findmypet.services.UserService
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
@@ -16,46 +16,33 @@ class UserRestController(
 ) {
 
     @PostMapping
-    fun saveUser(
-        @Valid @RequestBody userDto: UserDto
-    ): User {
-        val user = User(
-            userDto.name,
-            userDto.email,
-            userDto.password,
-        )
-        return userService.save(user)
+    @ResponseStatus(HttpStatus.CREATED)
+    fun saveUser(@Valid @RequestBody userRequestDto: UserRequestDto): UserResponseDto {
+        return userService.save(userRequestDto)
     }
 
     @GetMapping
-    fun getUsers(): List<User> {
+    fun getUsers(): List<UserResponseDto> {
         return userService.getAll()
     }
 
     @GetMapping("/{userId}")
-    fun getUser(@PathVariable("userId") userId: UUID): User {
-        return userService.getById(userId) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
+    fun getUser(@PathVariable userId: UUID): UserResponseDto {
+        return userService.getById(userId)
+            ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")
     }
 
     @PutMapping("/{userId}")
     fun updateUser(
-        @PathVariable("userId") userId: UUID,
-        @Valid @RequestBody userDto: UserDto
-    ) {
-        val user = userService.getById(userId)
-        user?.let {
-            user.name = userDto.name
-            user.email = userDto.email
-            user.password = userDto.password
-            userService.save(user)
-        } ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")
+        @PathVariable userId: UUID,
+        @Valid @RequestBody userRequestDto: UserRequestDto
+    ): UserResponseDto {
+        return userService.update(userRequestDto, userId)
     }
 
     @DeleteMapping("/{userId}")
-    fun deleteUser(@PathVariable("userId") userId: UUID) {
-        val user = userService.getById(userId)
-        user?.let {
-            userService.delete(it)
-        } ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun deleteUser(@PathVariable userId: UUID) {
+        userService.delete(userId)
     }
 }

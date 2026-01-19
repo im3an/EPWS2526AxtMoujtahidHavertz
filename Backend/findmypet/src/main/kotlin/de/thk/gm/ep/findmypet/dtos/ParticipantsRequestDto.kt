@@ -4,7 +4,7 @@ import java.util.UUID
 import jakarta.validation.constraints.NotNull
 
 //Von Gemini erstellen lassen
-class ParticipantsDto(
+data class ParticipantsRequestDto(
     @field:NotNull val accountId: UUID,
     @field:NotNull val missingReportId: UUID
 )
