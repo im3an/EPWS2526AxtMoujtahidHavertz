@@ -1,13 +1,12 @@
 package de.thk.gm.ep.findmypet.dtos
 
-import jakarta.persistence.ManyToOne
 import jakarta.validation.constraints.NotNull
+import jakarta.validation.constraints.Size
 import java.time.LocalDateTime
-import java.util.UUID
 
 
-class AreaDto(
+data class AreaRequestDto(
     @NotNull val searched: Boolean,
     val lastSearch: LocalDateTime?,
-    @NotNull val coordinates: List<CoordinateDto>,
+    @Size(min=3) val coordinates: List<CoordinateRequestDto>
 )
