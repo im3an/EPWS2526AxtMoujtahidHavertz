@@ -9,6 +9,7 @@ import de.thk.gm.ep.findmypet.repositories.MissingReportRepository
 import de.thk.gm.ep.findmypet.repositories.SightingRepository
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
 import java.util.UUID
 
@@ -26,6 +27,7 @@ class SightingServiceImpl(
         return sightingRepository.findAllByMissingReportId(missingReportId).toList().map { it.toResponseDto() }
     }
 
+    @Transactional
     override fun save(sightingRequestDto: SightingRequestDto, missingReportId: UUID): SightingResponseDto {
         val account = accountRepository.findByIdOrNull(sightingRequestDto.accountId)?: throw NoSuchElementException("Account not found")
         val missingReport = missingReportRepository.findByIdOrNull(missingReportId)?: throw NoSuchElementException("Missing report not found")
@@ -40,6 +42,7 @@ class SightingServiceImpl(
         return sightingRepository.save(sighting).toResponseDto()
     }
 
+    @Transactional
     override fun delete(missingReportId: UUID, sightingId: UUID) {
         sightingRepository.deleteById(sightingId)
     }

@@ -11,6 +11,7 @@ import de.thk.gm.ep.findmypet.repositories.MissingReportRepository
 import de.thk.gm.ep.findmypet.repositories.ParticipantsRepository
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 @Service
@@ -35,6 +36,7 @@ class ParticipantsServiceImpl(
         return participantsRepository.findByMissingReportId(missingReportId).toList().map { it.toResponseDto() }
     }
 
+    @Transactional
     override fun save(participantsRequestDto: ParticipantsRequestDto): ParticipantsResponseDto {
         val account = accountRepository.findByIdOrNull(participantsRequestDto.accountId)
             ?: throw NoSuchElementException("Account ${participantsRequestDto.accountId} not found")
@@ -51,6 +53,7 @@ class ParticipantsServiceImpl(
         return participantsRepository.save(participant).toResponseDto()
     }
 
+    @Transactional
     override fun delete(accountId: UUID, missingReportId: UUID) {
         val id = ParticipantsId(accountId, missingReportId)
         participantsRepository.deleteById(id)

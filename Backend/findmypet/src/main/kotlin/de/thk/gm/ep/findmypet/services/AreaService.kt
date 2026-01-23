@@ -2,6 +2,7 @@ package de.thk.gm.ep.findmypet.services
 
 import de.thk.gm.ep.findmypet.dtos.AreaRequestDto
 import de.thk.gm.ep.findmypet.dtos.AreaResponseDto
+import de.thk.gm.ep.findmypet.enums.Priority
 import java.util.UUID
 
 interface AreaService {
@@ -12,5 +13,6 @@ interface AreaService {
     fun delete(areaReportId: UUID)
     fun getByMissingReport(missingReportId: UUID): List<AreaResponseDto>
     fun getByMissingReportAndId(missingReportId: UUID, areaId: UUID): AreaResponseDto?
+    fun updatePriority(areaId: UUID, priority: Priority): AreaResponseDto
 
 }

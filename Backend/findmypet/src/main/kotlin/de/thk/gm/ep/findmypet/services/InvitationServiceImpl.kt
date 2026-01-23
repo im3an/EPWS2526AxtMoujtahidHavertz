@@ -40,6 +40,7 @@ class InvitationServiceImpl(
 
     }
 
+    @Transactional
     override fun createInvitation(invitationRequestDto: InvitationRequestDto): InvitationResponseDto {
         val missingReport = missingReportRepository.findByIdOrNull(invitationRequestDto.missingReportId) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Missing Report")
         val invitation = Invitation(missingReport = missingReport)

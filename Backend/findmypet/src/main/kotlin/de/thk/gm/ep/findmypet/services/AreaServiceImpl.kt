@@ -3,12 +3,14 @@ package de.thk.gm.ep.findmypet.services
 import de.thk.gm.ep.findmypet.dtos.AreaRequestDto
 import de.thk.gm.ep.findmypet.dtos.AreaResponseDto
 import de.thk.gm.ep.findmypet.dtos.toResponseDto
+import de.thk.gm.ep.findmypet.enums.Priority
 import de.thk.gm.ep.findmypet.models.Area
 import de.thk.gm.ep.findmypet.models.Coordinate
 import de.thk.gm.ep.findmypet.repositories.AreaRepository
 import de.thk.gm.ep.findmypet.repositories.MissingReportRepository
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 @Service
@@ -39,6 +41,7 @@ class AreaServiceImpl(
         return areaRepository.save(area).toResponseDto()
     }
 
+    @Transactional
     override fun update(areaRequestDto: AreaRequestDto, missingReportId: UUID, areaId: UUID): AreaResponseDto? {
         val areaToUpdate = areaRepository.findByMissingReportIdAndId(missingReportId, areaId)
             ?: return null
@@ -53,6 +56,7 @@ class AreaServiceImpl(
         return areaRepository.save(areaToUpdate).toResponseDto()
     }
 
+    @Transactional
     override fun delete(areaReportId: UUID) {
         areaRepository.deleteById(areaReportId)
     }
@@ -63,6 +67,14 @@ class AreaServiceImpl(
 
     override fun getByMissingReportAndId(missingReportId: UUID, areaId: UUID): AreaResponseDto? {
         return areaRepository.findByMissingReportIdAndId(missingReportId, areaId)?.toResponseDto()
+    }
+
+    @Transactional
+    override fun updatePriority(areaId: UUID, priority: Priority): AreaResponseDto {
+        val area = areaRepository.findByIdOrNull(areaId)
+            ?: throw NoSuchElementException("No matching area found for id $areaId")
+        area.priority = priority
+        return area.toResponseDto()
     }
 
 

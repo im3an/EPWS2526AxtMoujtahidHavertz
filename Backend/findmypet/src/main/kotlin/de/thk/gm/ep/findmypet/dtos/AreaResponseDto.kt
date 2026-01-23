@@ -1,5 +1,6 @@
 package de.thk.gm.ep.findmypet.dtos
 
+import de.thk.gm.ep.findmypet.enums.Priority
 import de.thk.gm.ep.findmypet.models.Area
 import java.time.LocalDateTime
 import java.util.*
@@ -10,6 +11,7 @@ data class AreaResponseDto(
     val lastSearched: LocalDateTime?,
     val coordinates: List<CoordinateResponseDto>,
     val missingReportId: UUID,
+    val priority: Priority
 )
 
 fun Area.toResponseDto() = AreaResponseDto(
@@ -17,5 +19,6 @@ fun Area.toResponseDto() = AreaResponseDto(
     searched = searched,
     lastSearched = lastSearched,
     coordinates = coordinates.map { it.toResponseDto() },
-    missingReportId = missingReport.id
+    missingReportId = missingReport.id,
+    priority = priority
 )

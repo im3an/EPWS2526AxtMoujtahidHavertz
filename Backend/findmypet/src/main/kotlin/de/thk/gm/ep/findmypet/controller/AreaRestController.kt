@@ -2,6 +2,7 @@ package de.thk.gm.ep.findmypet.controller
 
 import de.thk.gm.ep.findmypet.dtos.AreaRequestDto
 import de.thk.gm.ep.findmypet.dtos.AreaResponseDto
+import de.thk.gm.ep.findmypet.enums.Priority
 import de.thk.gm.ep.findmypet.services.AreaService
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
@@ -64,6 +65,15 @@ class AreaRestController(
         @PathVariable("areaId") areaId: UUID,
     ){
         areaService.delete(areaId)
+    }
+
+    @PatchMapping("{areaId}")
+    fun patchPriority(
+        @PathVariable("missingReportId") missingReportId: UUID,
+        @PathVariable("areaId") areaId: UUID,
+        @RequestParam priority: Priority
+    ): AreaResponseDto {
+        return areaService.updatePriority(areaId, priority)
     }
 
 }

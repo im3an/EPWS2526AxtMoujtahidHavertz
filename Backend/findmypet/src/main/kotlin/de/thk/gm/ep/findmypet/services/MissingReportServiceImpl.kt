@@ -7,6 +7,7 @@ import de.thk.gm.ep.findmypet.models.Coordinate
 import de.thk.gm.ep.findmypet.models.MissingReport
 import de.thk.gm.ep.findmypet.repositories.MissingReportRepository
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.util.*
 import kotlin.jvm.optionals.getOrNull
 
@@ -21,6 +22,7 @@ class MissingReportServiceImpl(private val missingReportRepository: MissingRepor
             .getOrNull()?.toResponseDto()
     }
 
+    @Transactional
     override fun save(missingReportRequestDto: MissingReportRequestDto): MissingReportResponseDto {
         val missingReport = MissingReport(
             petName = missingReportRequestDto.petName,
@@ -34,6 +36,7 @@ class MissingReportServiceImpl(private val missingReportRepository: MissingRepor
         return missingReportRepository.save(missingReport).toResponseDto()
     }
 
+    @Transactional
     override fun update(
         missingReportRequestDto: MissingReportRequestDto,
         missingReportId: UUID
@@ -51,6 +54,7 @@ class MissingReportServiceImpl(private val missingReportRepository: MissingRepor
 
     }
 
+    @Transactional
     override fun delete(missingReportId: UUID){
         missingReportRepository.deleteById(missingReportId)
     }

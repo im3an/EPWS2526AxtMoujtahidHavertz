@@ -7,6 +7,7 @@ import de.thk.gm.ep.findmypet.models.SingleUse
 import de.thk.gm.ep.findmypet.repositories.SingleUseRepository
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 @Service
@@ -25,6 +26,7 @@ class SingleUseServiceImpl(
         return singleUseRepository.findByName(name)?.toResponseDto()
     }
 
+    @Transactional
     override fun save(singleUseRequestDto: SingleUseRequestDto): SingleUseResponseDto {
         val singleUse = SingleUse(
             name = singleUseRequestDto.name,
@@ -34,6 +36,7 @@ class SingleUseServiceImpl(
         return singleUseRepository.save(singleUse).toResponseDto()
     }
 
+    @Transactional
     override fun update(singleUseRequestDto: SingleUseRequestDto, singleUseId: UUID): SingleUseResponseDto {
         val singleUse = singleUseRepository.findByIdOrNull(singleUseId) ?: throw NoSuchElementException("SingleUse with id $singleUseId not found")
         singleUse.apply {
@@ -43,6 +46,7 @@ class SingleUseServiceImpl(
         return singleUseRepository.save(singleUse).toResponseDto()
     }
 
+    @Transactional
     override fun delete(singleUseId: UUID) {
         singleUseRepository.deleteById(singleUseId)
     }
