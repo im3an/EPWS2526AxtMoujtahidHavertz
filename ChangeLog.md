@@ -1,5 +1,10 @@
 # Changelog
 
+### Changes since 26.01.2025:
+- Added [Systemkontext V2.0](Artefacts/Systemkontext/v02/Systemkontext_V2.0.md) - Verbesserte Systemkontext-Dokumentation mit detaillierten Mermaid-Diagrammen
+- Reorganized Systemkontext files into versioned folders (v01, v02)
+- Exported system context diagrams as PNG images for better compatibility
+
 ### Changes since 08.12.2025
 - Changed GitHub Structure
 - Added [Audit 2 Feedback](docs/general/Open%20Space%20und%20Audit%20Feedback/Audit%202%20-%2009.12.2025.md)
