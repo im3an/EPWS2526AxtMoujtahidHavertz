@@ -13,7 +13,7 @@ class Area(
     var priority: Priority = Priority.HIGH,
 
     @ElementCollection
-    var coordinates: List<Coordinate>, //Eigene Klasse Coordinate erstellt um Fehler zu beheben
+    var coordinates: List<Coordinate>, //Eigene Klasse Coordinate erstellt, um Fehler zu beheben
 
     @ManyToOne(fetch = FetchType.LAZY)
     val missingReport: MissingReport
