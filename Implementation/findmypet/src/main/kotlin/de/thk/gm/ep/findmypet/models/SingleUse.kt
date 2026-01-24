@@ -8,4 +8,4 @@ import jakarta.persistence.Entity
 class SingleUse(
     name: String,
     var nr: Int ,
-): Account(name) {}
+): Account(name)

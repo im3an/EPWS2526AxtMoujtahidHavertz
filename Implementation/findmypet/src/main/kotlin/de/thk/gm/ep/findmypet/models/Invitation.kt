@@ -8,21 +8,25 @@ import java.util.*
 class Invitation(
     var isActive: Boolean = true,
 
-    @Column(unique = true, nullable = false)
-    var token : String = generateToken(),
+    @Column(unique = true, nullable = false, updatable = false)
+    val token : String = generateToken(),
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "report_id", nullable = false)
-    val missingReport: MissingReport
+    val missingReport: MissingReport,
+
+    @Column(nullable = false, updatable = false)
+    val expirationDate: LocalDateTime = LocalDateTime.now().plusDays(7)
+
 
 ) {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue
+    @Column(columnDefinition = "uuid", updatable = false, nullable = false)
     val id: UUID? = null
-    val expirationDate: LocalDateTime = LocalDateTime.now().plusDays(7)
 
     fun isValid(): Boolean{
-        return this.expirationDate.isAfter(LocalDateTime.now())
+        return isActive && this.expirationDate.isAfter(LocalDateTime.now())
     }
 
     companion object {
