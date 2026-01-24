@@ -1,19 +1,28 @@
 package de.thk.gm.ep.findmypet.dtos
 
 import de.thk.gm.ep.findmypet.models.User
+import java.time.LocalDate
 import java.util.*
 
 data class UserResponseDto (
     override val id: UUID,
     override val name: String,
-    override val creationDate: String,
-    val email: String
+    override val creationDate: LocalDate,
+    val email: String,
+    val surname: String?,
+    val lastname: String?,
+    val phoneNumber: String?,
+    val address: AddressResponseDto?
 
 ): AccountResponse
 
 fun User.toResponseDto() = UserResponseDto (
-    id = id,
+    id = id!!,
     name = name,
     creationDate = creationDate,
-    email = email
+    email = email,
+    surname = surname,
+    lastname = lastname,
+    phoneNumber = phoneNumber,
+    address = address?.toResponseDto()
 )

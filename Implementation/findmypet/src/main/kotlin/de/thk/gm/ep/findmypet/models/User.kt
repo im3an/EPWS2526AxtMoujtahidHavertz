@@ -19,4 +19,4 @@ class User(
     var password: String,
     var phoneNumber: String? = null,
     var address: Address? = null
-): Account(name) { }
+): Account(name)

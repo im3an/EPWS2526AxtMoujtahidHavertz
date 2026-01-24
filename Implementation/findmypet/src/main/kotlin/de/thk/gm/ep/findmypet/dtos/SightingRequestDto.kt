@@ -1,10 +1,18 @@
 package de.thk.gm.ep.findmypet.dtos
 
-import de.thk.gm.ep.findmypet.models.Coordinate
+import jakarta.validation.Valid
 import jakarta.validation.constraints.NotNull
+import java.time.LocalDateTime
 import java.util.*
 
 data class SightingRequestDto(
-    @NotNull val location: Coordinate,
-    @NotNull val accountId: UUID
+    @field:NotNull
+    @field:Valid
+    val location: CoordinateRequestDto,
+
+    @field:NotNull
+    val sightingDateTime: LocalDateTime,
+
+    @field:NotNull
+    val accountId: UUID
 )

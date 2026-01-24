@@ -9,6 +9,6 @@ data class ParticipantsResponseDto(
 )
 
 fun Participants.toResponseDto() = ParticipantsResponseDto(
-    accountId = account.id,
-    missingReportId = missingReport.id
+    accountId = account.id!!,
+    missingReportId = missingReport.id!!
 )

@@ -8,7 +8,7 @@ import java.util.UUID
 @Entity
 class Area(
     var searched: Boolean = false,
-    var lastSearched: LocalDateTime? = null,
+    var lastSearch: LocalDateTime? = null,
 
     @Enumerated(EnumType.STRING)
     var priority: Priority = Priority.HIGH,

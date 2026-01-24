@@ -7,5 +7,5 @@ import jakarta.persistence.Entity
 @DiscriminatorValue(value = "SINGLE_USE")
 class SingleUse(
     name: String,
-    var nr: Int ,
+    var pin: Int ,
 ): Account(name)

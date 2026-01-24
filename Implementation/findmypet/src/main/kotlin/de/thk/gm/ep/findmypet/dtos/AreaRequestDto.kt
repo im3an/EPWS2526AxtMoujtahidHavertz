@@ -17,5 +17,5 @@ data class AreaRequestDto(
     val coordinates: List<CoordinateRequestDto>,
 
     @field:NotNull
-    val priority: Priority
+    val priority: Priority = Priority.HIGH,
 )

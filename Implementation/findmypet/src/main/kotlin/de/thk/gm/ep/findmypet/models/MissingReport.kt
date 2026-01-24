@@ -16,7 +16,7 @@ class MissingReport(
     var images:String?,
 
     @Column(nullable = false)
-    var isPublic: Boolean,
+    var isPublic: Boolean = false,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id", nullable = false)

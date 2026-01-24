@@ -8,17 +8,17 @@ import java.util.*
 data class AreaResponseDto(
     val id: UUID,
     val searched: Boolean,
-    val lastSearched: LocalDateTime?,
+    val lastSearch: LocalDateTime?,
     val coordinates: List<CoordinateResponseDto>,
     val missingReportId: UUID,
     val priority: Priority
 )
 
 fun Area.toResponseDto() = AreaResponseDto(
-    id = id,
+    id = id!!,
     searched = searched,
-    lastSearched = lastSearched,
+    lastSearch = lastSearch,
     coordinates = coordinates.map { it.toResponseDto() },
-    missingReportId = missingReport.id,
+    missingReportId = missingReport.id!!,
     priority = priority
 )

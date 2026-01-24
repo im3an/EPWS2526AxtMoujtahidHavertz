@@ -14,5 +14,4 @@ data class CoordinateRequestDto(
     @field:DecimalMin(value = "-90.0", message = "Breitengrad ungültig und muss mindestens -90 betragen")
     @field:DecimalMax(value = "90.0", message = "Breitengrad ungültig und darf maximal 90 betragen")
     val latitude: Double
-) {
-}
+)
