@@ -30,7 +30,7 @@ class SingleUseServiceImpl(
     override fun save(singleUseRequestDto: SingleUseRequestDto): SingleUseResponseDto {
         val singleUse = SingleUse(
             name = singleUseRequestDto.name,
-            nr = generatePin()
+            pin = generatePin()
         )
 
         return singleUseRepository.save(singleUse).toResponseDto()

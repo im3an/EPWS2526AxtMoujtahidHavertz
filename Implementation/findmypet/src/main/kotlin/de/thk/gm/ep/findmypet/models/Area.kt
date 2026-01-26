@@ -1,5 +1,6 @@
 package de.thk.gm.ep.findmypet.models
 
+import de.thk.gm.ep.findmypet.enums.AreaType
 import de.thk.gm.ep.findmypet.enums.Priority
 import jakarta.persistence.*
 import java.time.LocalDateTime
@@ -11,10 +12,16 @@ class Area(
     var lastSearch: LocalDateTime? = null,
 
     @Enumerated(EnumType.STRING)
+    var areaType: AreaType,
+
+    var radius: Double? = null,
+
+    @Enumerated(EnumType.STRING)
     var priority: Priority = Priority.HIGH,
 
     @ElementCollection
-    var coordinates: List<Coordinate>, //Eigene Klasse Coordinate erstellt, um Fehler zu beheben
+    @OrderColumn(name = "coordinate_index" )
+    var coordinates: MutableList<Coordinate> = mutableListOf(), //MutableList, damit Punkte einfacher und sauberer geändert werden können innerhalb der Liste (oder neue hinzugefügt / entfernt)
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "missing_report_id")

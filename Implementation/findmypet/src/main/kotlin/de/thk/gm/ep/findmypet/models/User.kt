@@ -9,7 +9,7 @@ import jakarta.persistence.Entity
 @DiscriminatorValue(value = "USER")
 class User(
     var surname: String?,
-    var lastname: String?,
+    var firstname: String?,
 
     //name wird zum Einloggen verwendet.
     name:String,

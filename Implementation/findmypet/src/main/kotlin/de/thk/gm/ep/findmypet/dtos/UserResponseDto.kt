@@ -10,7 +10,7 @@ data class UserResponseDto (
     override val creationDate: LocalDate,
     val email: String,
     val surname: String?,
-    val lastname: String?,
+    val firstname: String?,
     val phoneNumber: String?,
     val address: AddressResponseDto?
 
@@ -22,7 +22,7 @@ fun User.toResponseDto() = UserResponseDto (
     creationDate = creationDate,
     email = email,
     surname = surname,
-    lastname = lastname,
+    firstname = firstname,
     phoneNumber = phoneNumber,
     address = address?.toResponseDto()
 )

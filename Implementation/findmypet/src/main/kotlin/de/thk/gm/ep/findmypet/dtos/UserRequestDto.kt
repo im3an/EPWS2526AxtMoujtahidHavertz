@@ -11,7 +11,7 @@ data class UserRequestDto(
     val surname: String?,
 
     @field:Size(min = 2, max = 30)
-    val lastname: String?,
+    val firstname: String?,
 
     @field:Pattern(regexp = "^\\+?[0-9\\s\\-]{7,20}$", message = "Ungültiges Telefonnummer-Format")
     val phoneNumber: String?,
