@@ -1,0 +1,32 @@
+# --- OS Dateien ---
+.DS_Store
+Thumbs.db
+
+# --- Build & Output ---
+out/
+bin/
+build/
+target/
+**/build/
+**/bin/
+**/out/
+
+# --- Gradle & Projekt-Spezifisches ---
+.gradle/
+**/findmypet/.gradle/
+.kotlin/
+
+# --- IDEs ---
+.idea/
+*.iws
+*.iml
+*.ipr
+.vscode/
+.settings/
+.classpath
+.project
+.factorypath
+.apt_generated
+
+# --- Ausnahmen (Falls Gradle-Wrapper genutzt wird) ---
+!gradle/wrapper/gradle-wrapper.jar
