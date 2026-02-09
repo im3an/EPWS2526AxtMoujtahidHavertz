@@ -1,6 +1,7 @@
 # Changelog
 
 ### Changes since 26.01.2025:
+- Added [Figma Frontenddesign](https://www.figma.com/design/jBbwugpHHAfI1wW21IE48c/EP-Frontend?node-id=0-1&t=tUQt7ICvSeaYATsD-1)
 - Added [Systemkontext V2.0](Artefacts/Systemkontext/v02/Systemkontext_V2.0.md) - Verbesserte Systemkontext-Dokumentation mit detaillierten Mermaid-Diagrammen
 - Reorganized Systemkontext files into versioned folders (v01, v02)
 - Exported system context diagrams as PNG images for better compatibility
