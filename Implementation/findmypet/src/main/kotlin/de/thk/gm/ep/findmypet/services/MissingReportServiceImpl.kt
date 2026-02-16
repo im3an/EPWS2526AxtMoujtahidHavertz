@@ -5,6 +5,7 @@ import de.thk.gm.ep.findmypet.dtos.MissingReportResponseDto
 import de.thk.gm.ep.findmypet.dtos.toResponseDto
 import de.thk.gm.ep.findmypet.models.Coordinate
 import de.thk.gm.ep.findmypet.models.MissingReport
+import de.thk.gm.ep.findmypet.models.User
 import de.thk.gm.ep.findmypet.repositories.MissingReportRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -12,7 +13,9 @@ import java.util.*
 import kotlin.jvm.optionals.getOrNull
 
 @Service
-class MissingReportServiceImpl(private val missingReportRepository: MissingReportRepository): MissingReportService {
+class MissingReportServiceImpl(
+    private val missingReportRepository: MissingReportRepository,
+): MissingReportService {
     override fun getAll(): List<MissingReportResponseDto> {
         return missingReportRepository.findAll().toList().map { it.toResponseDto() }
     }
@@ -26,12 +29,23 @@ class MissingReportServiceImpl(private val missingReportRepository: MissingRepor
     override fun save(missingReportRequestDto: MissingReportRequestDto): MissingReportResponseDto {
         val missingReport = MissingReport(
             petName = missingReportRequestDto.petName,
-            location = Coordinate(missingReportRequestDto.location.longitude, missingReportRequestDto.location.latitude),
+            species = missingReportRequestDto.species,
+            breed = missingReportRequestDto.breed,
+            primaryColor = missingReportRequestDto.primaryColor,
+            colorDetails = missingReportRequestDto.colorDetails,
+            petSize = missingReportRequestDto.petSize,
+            ageRange = missingReportRequestDto.ageRange,
+            chipNumber = missingReportRequestDto.chipNumber,
             description = missingReportRequestDto.description,
             images = null,
-            public = missingReportRequestDto.public,
-            ownerId = UUID.randomUUID(), //Platzhalter später wird die ID über Principal abgerufen (Spring Boot Security)
-            status = missingReportRequestDto.status
+            lostDate = missingReportRequestDto.lostDate,
+            location = Coordinate(missingReportRequestDto.location.longitude, missingReportRequestDto.location.latitude),
+            isPublic = missingReportRequestDto.isPublic,
+            status = missingReportRequestDto.status,
+            owner = User(name = "test", password = "test", email = "test", firstname = "test", surname = "test"), //PLATZHALTER BIS PRINCIPAL BENUTZT WIRD UM DEN USER ZU HOLEN
+            areas = mutableListOf(),
+            sightings = mutableListOf(),
+            participants = mutableListOf()
         )
         return missingReportRepository.save(missingReport).toResponseDto()
     }
@@ -43,16 +57,27 @@ class MissingReportServiceImpl(private val missingReportRepository: MissingRepor
     ): MissingReportResponseDto {
         val missingReportToUpdate = missingReportRepository.findById(missingReportId).getOrNull()
             ?: throw NoSuchElementException("No matching report found for id $missingReportId")
+
         missingReportToUpdate.apply {
             petName = missingReportRequestDto.petName
-            location = Coordinate(missingReportRequestDto.location.longitude, missingReportRequestDto.location.latitude)
+            species = missingReportRequestDto.species
+            breed = missingReportRequestDto.breed
+            primaryColor = missingReportRequestDto.primaryColor
+            colorDetails = missingReportRequestDto.colorDetails
+            petSize = missingReportRequestDto.petSize
+            ageRange = missingReportRequestDto.ageRange
+            chipNumber = missingReportRequestDto.chipNumber
             description = missingReportRequestDto.description
-            public = missingReportRequestDto.public
+            images = missingReportRequestDto.images
+            lostDate = missingReportRequestDto.lostDate
+            location = Coordinate(missingReportRequestDto.location.longitude, missingReportRequestDto.location.latitude)
+            isPublic = missingReportRequestDto.isPublic
             status = missingReportRequestDto.status
         }
             return missingReportRepository.save(missingReportToUpdate).toResponseDto()
 
     }
+
 
     @Transactional
     override fun delete(missingReportId: UUID){

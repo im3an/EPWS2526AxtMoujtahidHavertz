@@ -33,7 +33,7 @@ class InvitationServiceImpl(
 
         val newAccount = singleUseService.save(singleUseRequest)
 
-        participantsService.save(ParticipantsRequestDto(newAccount.id, invitation.missingReport.id))
+        participantsService.save(ParticipantsRequestDto(newAccount.id, invitation.missingReport.id!!))
 
         return newAccount
 

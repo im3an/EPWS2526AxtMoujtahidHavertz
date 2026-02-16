@@ -7,7 +7,9 @@ import java.util.UUID
 @Entity
 class Sighting(
 
+    @Column(nullable = false)
     var sightingDateTime: LocalDateTime,
+    @Column(nullable = false)
     var location: Coordinate,
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -19,6 +21,8 @@ class Sighting(
     val account: Account
 ) {
     @Id
-    val id: UUID = UUID.randomUUID()
+    @GeneratedValue
+    @Column(columnDefinition = "uuid", updatable = false, nullable = false)
+    val id: UUID? = null
 
 }

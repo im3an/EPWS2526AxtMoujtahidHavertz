@@ -14,4 +14,11 @@ data class InvitationResponseDto (
 
 )
 
-fun Invitation.toResponseDto(url: String) = InvitationResponseDto(isActive, token, missingReport.id, id!!, expirationDate, url)
+fun Invitation.toResponseDto(url: String) = InvitationResponseDto(
+    isActive = isActive,
+    token = token,
+    missingReportId = missingReport.id!!,
+    id = id!!,
+    expirationDate = expirationDate,
+    invitationUrl = url
+)

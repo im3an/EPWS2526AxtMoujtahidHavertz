@@ -1,11 +1,6 @@
 package de.thk.gm.ep.findmypet.models
 
-import jakarta.persistence.DiscriminatorColumn
-import jakarta.persistence.DiscriminatorType
-import jakarta.persistence.Entity
-import jakarta.persistence.Id
-import jakarta.persistence.Inheritance
-import jakarta.persistence.InheritanceType
+import jakarta.persistence.*
 import java.time.LocalDate
 import java.util.UUID
 
@@ -13,8 +8,14 @@ import java.util.UUID
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "account_type", discriminatorType = DiscriminatorType.STRING)
 abstract class Account(
+    @Column(unique = true, nullable = false)
     var name: String,
-    val creationDate: String = LocalDate.now().toString()
+
+    @Column(updatable = false, nullable = false)
+    val creationDate: LocalDate = LocalDate.now()
 ) {
-    @Id val id: UUID = UUID.randomUUID()
+    @Id
+    @GeneratedValue
+    @Column(columnDefinition = "uuid", updatable = false, nullable = false)
+    val id: UUID? = null
 }

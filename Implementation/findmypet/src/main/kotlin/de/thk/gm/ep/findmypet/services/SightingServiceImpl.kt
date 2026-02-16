@@ -3,6 +3,7 @@ package de.thk.gm.ep.findmypet.services
 import de.thk.gm.ep.findmypet.dtos.SightingRequestDto
 import de.thk.gm.ep.findmypet.dtos.SightingResponseDto
 import de.thk.gm.ep.findmypet.dtos.toResponseDto
+import de.thk.gm.ep.findmypet.models.Coordinate
 import de.thk.gm.ep.findmypet.models.Sighting
 import de.thk.gm.ep.findmypet.repositories.AccountRepository
 import de.thk.gm.ep.findmypet.repositories.MissingReportRepository
@@ -35,10 +36,20 @@ class SightingServiceImpl(
         val sighting = Sighting(
             account = account,
             missingReport = missingReport,
-            location = sightingRequestDto.location,
+            location = Coordinate(sightingRequestDto.location.longitude,sightingRequestDto.location.latitude),
             sightingDateTime = LocalDateTime.now()
         )
 
+        return sightingRepository.save(sighting).toResponseDto()
+    }
+
+    @Transactional
+    override fun update(sightingRequestDto: SightingRequestDto, missingReportId: UUID, sightingId: UUID): SightingResponseDto {
+        val sighting = sightingRepository.findByIdOrNull(sightingId)?: throw NoSuchElementException("Sighting not found")
+        sighting.apply {
+            location = Coordinate(sightingRequestDto.location.longitude,sightingRequestDto.location.latitude)
+            sightingDateTime = LocalDateTime.now()
+        }
         return sightingRepository.save(sighting).toResponseDto()
     }
 

@@ -31,12 +31,16 @@ class AreaServiceImpl(
 
         val area = Area(
             searched = areaRequestDto.searched,
-            lastSearched = null,
+            lastSearch = null,
             missingReport = missingReport,
+            areaType = areaRequestDto.areaType,
+            radius = areaRequestDto.radius,
+            priority = areaRequestDto.priority,
             coordinates = areaRequestDto.coordinates.map { dto ->
                 Coordinate(dto.longitude,dto.latitude)
-            }
+            }.toMutableList()
         )
+        missingReport.areas.add(area)
 
         return areaRepository.save(area).toResponseDto()
     }
@@ -48,9 +52,13 @@ class AreaServiceImpl(
 
         areaToUpdate.apply {
             searched = areaRequestDto.searched
+            lastSearch = areaRequestDto.lastSearch
+            areaType = areaRequestDto.areaType
+            radius = areaRequestDto.radius
+            priority = areaRequestDto.priority
             coordinates = areaRequestDto.coordinates.map { dto ->
                 Coordinate(dto.longitude, dto.latitude)
-            }
+            }.toMutableList()
         }
 
         return areaRepository.save(areaToUpdate).toResponseDto()

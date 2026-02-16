@@ -45,7 +45,7 @@ class ParticipantsServiceImpl(
             ?: throw NoSuchElementException("Report ${participantsRequestDto.missingReportId} not found")
 
         val participant = Participants(
-            participantId = ParticipantsId(account.id, missingReport.id),
+            participantId = ParticipantsId(account.id!!, missingReport.id!!),
             account = account,
             missingReport = missingReport
         )
