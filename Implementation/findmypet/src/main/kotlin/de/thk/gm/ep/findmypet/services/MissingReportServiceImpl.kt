@@ -7,6 +7,7 @@ import de.thk.gm.ep.findmypet.models.Coordinate
 import de.thk.gm.ep.findmypet.models.MissingReport
 import de.thk.gm.ep.findmypet.models.User
 import de.thk.gm.ep.findmypet.repositories.MissingReportRepository
+import de.thk.gm.ep.findmypet.repositories.UserRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
@@ -15,6 +16,7 @@ import kotlin.jvm.optionals.getOrNull
 @Service
 class MissingReportServiceImpl(
     private val missingReportRepository: MissingReportRepository,
+    private val userRepository: UserRepository,
 ): MissingReportService {
     override fun getAll(): List<MissingReportResponseDto> {
         return missingReportRepository.findAll().toList().map { it.toResponseDto() }
@@ -27,6 +29,10 @@ class MissingReportServiceImpl(
 
     @Transactional
     override fun save(missingReportRequestDto: MissingReportRequestDto): MissingReportResponseDto {
+        val testowner = userRepository.findByEmail("test@test.de")?:userRepository.save(User(name = "test", password = "test", email = "test@test.de", firstname = "test", surname = "test"))
+
+
+
         val missingReport = MissingReport(
             petName = missingReportRequestDto.petName,
             species = missingReportRequestDto.species,
@@ -42,7 +48,7 @@ class MissingReportServiceImpl(
             location = Coordinate(missingReportRequestDto.location.longitude, missingReportRequestDto.location.latitude),
             isPublic = missingReportRequestDto.isPublic,
             status = missingReportRequestDto.status,
-            owner = User(name = "test", password = "test", email = "test", firstname = "test", surname = "test"), //PLATZHALTER BIS PRINCIPAL BENUTZT WIRD UM DEN USER ZU HOLEN
+            owner = testowner, //PLATZHALTER BIS PRINCIPAL BENUTZT WIRD UM DEN USER ZU HOLEN
             areas = mutableListOf(),
             sightings = mutableListOf(),
             participants = mutableListOf()

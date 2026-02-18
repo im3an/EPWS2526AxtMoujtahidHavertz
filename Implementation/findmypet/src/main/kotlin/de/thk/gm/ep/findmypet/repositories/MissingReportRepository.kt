@@ -9,6 +9,6 @@ import java.util.UUID
 interface MissingReportRepository: CrudRepository<MissingReport, UUID> {
     fun findByPetName(petName: String): MissingReport?
     fun findByOwnerId(ownerId: UUID): List<MissingReport>
-    fun findByPublic(public: Boolean): List<MissingReport>
+    fun findByIsPublic(public: Boolean): List<MissingReport>
 
 }
