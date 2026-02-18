@@ -36,7 +36,7 @@ data class MissingReportRequestDto(
 
     val description: String?,
 
-    val images: String?,
+    val images: MutableList<String> = mutableListOf(),
 
     @field:NotNull
     @field:PastOrPresent(message = "Datum darf nicht in der Zukunft liegen")

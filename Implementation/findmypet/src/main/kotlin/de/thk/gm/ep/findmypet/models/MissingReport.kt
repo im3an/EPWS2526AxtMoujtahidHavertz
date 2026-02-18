@@ -21,14 +21,17 @@ class MissingReport(
     var breed: String?,
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     var primaryColor: PetColor,
 
     var colorDetails: String?,
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     var petSize: PetSize,
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     var ageRange: AgeRange,
 
     var chipNumber: String?,
@@ -36,7 +39,9 @@ class MissingReport(
 
     var description: String?,
 
-    var images:String?,
+    @ElementCollection
+    @Column(name = "image_data", columnDefinition = "TEXT")
+    var images: MutableList<String> = mutableListOf(),
 
     @Column(nullable = false)
     var lostDate: LocalDateTime,

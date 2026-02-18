@@ -19,7 +19,7 @@ data class MissingReportResponseDto(
     val ageRange: AgeRange,
     val chipNumber: String?,
     val description: String?,
-    val images: String?,
+    val images: MutableList<String>,
     val lostDate: LocalDateTime,
     val location: CoordinateResponseDto,
     val isPublic: Boolean,
