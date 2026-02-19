@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -123,12 +122,12 @@
 </div>
 
 <div id="areanav" class="bottomNav">
-    <select name="priority" id="priority" > 
-        <option value="Hohe Priortät">high</option>
-        <option value="Norm Priortät" selected = "selected">middle</option>
-        <option value="Nidrige Priortät">low</option>
+    <select name="priority" id="priority" onchange="editPriority(this.value)"> 
+        <option value="HIGH">high</option>
+        <option value="MEDIUM" selected = "selected">middle</option>
+        <option value="LOW">low</option>
     </select>
-    <button type="button"> Delete Area</button>
+    <button type="button" onclick="deleteArea()"> Delete Area</button>
     <button type="butten"> Searched</button>
 </div>
 <div id="createAreaMenu" class="bottomNav">
@@ -164,21 +163,6 @@
 		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 	}).addTo(map);
 
-    const missingReportId = "0dc298d8-30cc-4713-a374-844b3e12728e"
-
-    var missingReport
-    
-    async function getMissingReport() {
-        console.log("/api/v1/missing-reports/".concat("",missingReportId))
-        missingReport =   await fetch("http://localhost:8080/api/v1/missing-reports/".concat("",missingReportId),{
-        method: "GET",
-        headers: {"Content-type":"application/json"},
-    });
-    }
-    getMissingReport()
-    //console.log(await missingReport)
-
-
     var areas = [
         L.polygon([
             [51.509, -0.08],
@@ -192,17 +176,78 @@
             priority: "middle"
         }}).addTo(map).on("click", areaOnClick)
     ]
+
     var polygonslate;
+
+    const missingReportId = "0dc298d8-30cc-4713-a374-844b3e12728e"
+
+    async function getData() {
+        let response = await fetch("/api/v1/missing-reports/".concat("",missingReportId));
+        let data = await response.json()
+        return data
+    }
+
+        function priorityToCollor(prio){
+        switch(prio){
+            case "HIGH":
+                return "#FF8B94";
+            case "MEDIUM":
+                return "FFD3B6";
+            case "LOW":
+                return "#A8E6CF"
+            default:
+                return "#FFFFFF"
+        }
+    }
+
+    function addAreas(report){
+        console.log(report.areas);
+        report.areas.forEach(element => {
+            coordinates=[];
+            element.coordinates.forEach(element => {
+                coordinates.push([element.latitude,element.longitude]);
+            });
+            console.log(JSON.stringify(coordinates))
+            areas.push(
+                L.polygon(coordinates,{
+                    color: priorityToCollor(element.priority),
+                    data:{
+                        id: element.id,
+                        active: false,
+                        priority: element.priority
+                    }
+                }).addTo(map).on("click", areaOnClick)
+            )
+            console.log(JSON.stringify(areas[areas.length-1].options.data))
+        });
+    }
+    function loadArea(){
+        try{
+        
+        areas.forEach(p => map.removeLayer(p));
+        areas=[];
+        console.log("cleared")
+        const missingReport = getData()
+        console.log(missingReport.then((data) => {
+            console.log(data)
+            addAreas(data)
+        }))
+        }catch(err){
+            console.log(err)
+        }
+    }
+    loadArea();
+
 
     function activateDrawing(){
         console.log(areas.length)
         drawing = true
         polygonslate = L.polygon([[]],{
-            color: "#0088ff",
+            color: priorityToCollor("MEDIUM"),
             data:{
             id: null,
             active: false,
-            priority: "middle"}
+            priority: "MEDIUM"}
         })
         polygonslate.addTo(map)
         console.log("slate created")
@@ -237,12 +282,83 @@
         }
     }
 
-    function postArea(){
-        if(polygonslate.getLatLngs()[0].length>2){
-        areas.push(polygonslate)
-        closeCreateArea()
-        areas[areas.length-1].addTo(map).on("click", areaOnClick)
+
+
+    function areaToAPIconverter(area){
+        coordinates = []
+        console.log(area.getLatLngs()[0])
+        area.getLatLngs()[0].forEach((element)=>{coordinates.push({
+            "latitude": element.lat,
+            "longitude": element.lng
+        })})
+        json = {
+            id: area.options.data.id,
+            searched: true,
+            lastSearch: null,
+            coordinates: coordinates,
+            missingReportId: missingReportId,
+            priority : area.options.data.priority,
+            radius: 0,
+            areaType: "POLYGON"
         }
+        return json
+    }
+
+    async function deleteArea(){
+        try{
+            console.log(selectedPoligon.target.options.data.id)
+            url = "/api/v1/missing-reports/".concat("",missingReportId).concat("","/areas/").concat("",selectedPoligon.target.options.data.id)
+            console.log(url)
+            const response = await fetch(url,{
+                method: "DELETE",
+                }
+            );
+            deactivateArea(selectedPoligon)
+            loadArea()
+        }catch(err){
+            console.log(err)
+        }
+    }
+
+    async function postArea(){
+        if(polygonslate.getLatLngs()[0].length>2){
+            try{
+                url = "/api/v1/missing-reports/".concat("",missingReportId).concat("","/areas")
+                json=areaToAPIconverter(polygonslate)
+                const response = await fetch(url,{
+                    method: "POST",
+                    headers:{"Content-Type":"application/json"},
+                    body: JSON.stringify(json)
+                    }
+                );
+                areas.push(polygonslate)
+                closeCreateArea()
+                areas[areas.length-1].addTo(map).on("click", areaOnClick)
+            }catch(err){
+                console.log(err)
+            }
+        }
+    }
+
+    async function editPriority(prio){
+            try{
+                console.log(prio)
+                url = url = "/api/v1/missing-reports/".concat("",missingReportId).concat("","/areas/").concat("",selectedPoligon.target.options.data.id)
+                
+                selectedPoligon.target.options.data.priority = prio
+                selectedPoligon.target.setStyle({color:priorityToCollor(selectedPoligon.target.options.data.priority)})
+                json=areaToAPIconverter(selectedPoligon.target)
+                console.log(json)
+                const response = await fetch(url,{
+                    method: "PUT",
+                    headers:{"Content-Type":"application/json"},
+                    body: JSON.stringify(json)
+                    }
+                );
+            }catch(err){
+                console.log(err)
+            }
+        
     }
     
     function activateArea(e){
@@ -254,7 +370,7 @@
     }
     
     function deactivateArea(e){
-        e.target.setStyle({color:"#0088ff"})
+        e.target.setStyle({color:priorityToCollor(e.target.options.data.priority)})
         e.target.options.data.active = false
         document.getElementById("areanav").style.display = "none"
         selectedPoligon = null
