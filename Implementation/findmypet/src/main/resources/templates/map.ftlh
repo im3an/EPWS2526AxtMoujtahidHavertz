@@ -114,11 +114,19 @@
 <body>
 
 <div id="mySidenav" class="sidenav">
-    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-    <a href="#">About</a>
-    <a href="#">Services</a>
-    <a href="#">Clients</a>
-    <a href="#">Contact</a>
+    <button onclick="closeNav()">CLOSE</button>
+    <h3><strong>${missingReport.petName}</strong></h3>
+    <ul>
+        <li>${missingReport.species}</li>
+        <li>${missingReport.breed}</li>
+        <li>${missingReport.breed}</li>
+        <li>${missingReport.primaryColor}</li>
+        <li>${missingReport.colorDetails}</li>
+        <li>${missingReport.petSize}</li>
+        <li>${missingReport.ageRange}</li>
+        <li>${missingReport.chipNumber}</li>
+        <li>${missingReport.description}</li>
+    </ul>
 </div>
 
 <div id="areanav" class="bottomNav">
@@ -141,12 +149,12 @@
 </div>
 
 
-<a id="sideNavBtn" href="#" class="float">
-<span onclick="openNav()">open</span>
+<a id="sideNavBtn" href="#" class="float" onclick="openNav()">
+<span>PetInfo</span>
 </a>
 
-<a id="createAreaBtn" class="float">
-    <span onclick="createArea()">+</span>
+<a id="createAreaBtn" class="float"onclick="createArea()">
+    <span>+</span>
 </a>
 
 
@@ -179,7 +187,7 @@
 
     var polygonslate;
 
-    const missingReportId = "0dc298d8-30cc-4713-a374-844b3e12728e"
+    const missingReportId = "${missingReport.id}" //Potential probolme when js is moved out of .ftlh
 
     async function getData() {
         let response = await fetch("/api/v1/missing-reports/".concat("",missingReportId));
@@ -378,13 +386,15 @@
 
     function openNav() {
         document.getElementById("mySidenav").style.width = "20%";
-        document.getElementById("sideNavBtn").style.display = "none"
+        document.getElementById("sideNavBtn").style.left = "22%"
+        document.getElementById("sideNavBtn").onclick = closeNav
     }
 
     function closeNav() {
         document.getElementById("mySidenav").style.width = "0";
         document.getElementById("map").style.margin = "0";
-        document.getElementById("sideNavBtn").style.display = "block"
+        document.getElementById("sideNavBtn").style.left = "2%"
+        document.getElementById("sideNavBtn").onclick = openNav
     }
 
     function closeCreateArea(){
