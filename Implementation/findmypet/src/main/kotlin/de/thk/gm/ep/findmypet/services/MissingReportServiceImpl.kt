@@ -1,5 +1,6 @@
 package de.thk.gm.ep.findmypet.services
 
+import de.thk.gm.ep.findmypet.dtos.MissingReportPreviewResponseDto
 import de.thk.gm.ep.findmypet.dtos.MissingReportRequestDto
 import de.thk.gm.ep.findmypet.dtos.MissingReportResponseDto
 import de.thk.gm.ep.findmypet.dtos.toResponseDto
@@ -8,6 +9,8 @@ import de.thk.gm.ep.findmypet.models.MissingReport
 import de.thk.gm.ep.findmypet.models.User
 import de.thk.gm.ep.findmypet.repositories.MissingReportRepository
 import de.thk.gm.ep.findmypet.repositories.UserRepository
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
@@ -93,6 +96,27 @@ class MissingReportServiceImpl(
 
     override fun getByOwnerId(ownerId: UUID): List<MissingReportResponseDto> {
         TODO("Not yet implemented")
+    }
+
+    override fun getNearbyReports(
+        lat: Double,
+        lon: Double,
+        radius: Double,
+        page: Int,
+        size: Int
+    ): Page<MissingReportPreviewResponseDto> {
+        val pageable = PageRequest.of(page, size)
+        val reports = missingReportRepository.findNearbyReports(lat, lon, radius, pageable)
+
+        return reports.map { report ->
+            MissingReportPreviewResponseDto(
+                id = report.getId(),
+                petName = report.getPetName(),
+                species = report.getSpecies(),
+                previewImage = report.getPreviewImage() ?: "",
+                distanceToUser = report.getDistance()
+            )
+        }
     }
 
 }
