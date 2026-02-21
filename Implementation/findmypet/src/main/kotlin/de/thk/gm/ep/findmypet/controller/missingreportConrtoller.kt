@@ -13,10 +13,16 @@ import java.util.*
 class missingreportConrtoller(
     private val missingReportService: MissingReportService
 ) {
-    @GetMapping("map/{missingReportId}")
-    fun map(model: Model, @PathVariable missingReportId: UUID): String {
+    @GetMapping("ownerMap/{missingReportId}")
+    fun ownerMap(model: Model, @PathVariable missingReportId: UUID): String {
         model.addAttribute("missingReport",missingReportService.getById(missingReportId))
-        return "map"
+        return "ownerMap"
+    }
+
+    @GetMapping("participantMap/{missingReportId}")
+    fun participantMap(model: Model, @PathVariable missingReportId: UUID): String {
+        model.addAttribute("missingReport",missingReportService.getById(missingReportId))
+        return "participantMap"
     }
 
 }
