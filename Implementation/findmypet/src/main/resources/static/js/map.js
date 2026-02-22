@@ -36,6 +36,8 @@ function priorityToCollor(prio){
 
 function addAreas(report){
     console.log(report.areas);
+    const pointOfLostPet = [report.location.latitude, report.location.latitude]
+    map.setView(pointOfLostPet, 13);
     report.areas.forEach(element => {
         coordinates=[];
         element.coordinates.forEach(element => {
@@ -57,7 +59,6 @@ function addAreas(report){
 }
 function loadArea(){
     try{
-
     areas.forEach(p => map.removeLayer(p));
     areas=[];
     console.log("cleared")
@@ -90,7 +91,7 @@ function activateDrawing(){
 }
 
 function deactivateDrawing(){
-    map.off()
+    map.off("click",onMapClick)
     drawing = false
     map.removeLayer(polygonslate)
     polygonslate = null
