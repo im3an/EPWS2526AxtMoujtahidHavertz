@@ -23,7 +23,6 @@ class HomeController(private val missingReportService: MissingReportService) {
         model.addAttribute("reports", reportsPage.content)
 
         } else {
-            val reportsPage = missingReportService.getAll()
             model.addAttribute("reports", emptyList<MissingReport>())
         }
 
