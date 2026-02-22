@@ -20,7 +20,7 @@
                 <p class="distance">
                     <strong>${report.distanceToUser?string("0.0")} km</strong> von dir entfernt
                 </p>
-                <a href="/reports/${report.id}" class="btn">Details</a>
+                <a href="/missing-reports/${report.id}" class="btn">Details</a>
             </div>
         </div>
     </#list>

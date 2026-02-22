@@ -15,7 +15,7 @@ var polygonslate;
 var missingReportId
 
 async function getData() {
-    missingReportId = await window.location.href.split("/")[4] // !!!!!!!!! HAS TO BE CHANGE WHEN PATH CHANGES !!!!!!!!!!!
+    missingReportId = window.location.href.split("/")[4] // !!!!!!!!! HAS TO BE CHANGE WHEN PATH CHANGES !!!!!!!!!!!
     let response = await fetch("/api/v1/missing-reports/".concat("",missingReportId));
     let data = await response.json()
     return data
@@ -36,8 +36,8 @@ function priorityToCollor(prio){
 
 function addAreas(report){
     console.log(report.areas);
-    const pointOfLostPet = [report.location.latitude, report.location.latitude]
-    map.setView(pointOfLostPet, 13);
+    const pointOfLostPet = [report.location.latitude, report.location.longitude]
+    map.setView(pointOfLostPet, 18);
     report.areas.forEach(element => {
         coordinates=[];
         element.coordinates.forEach(element => {

@@ -16,13 +16,33 @@ class MissingReportController(private val missingReportsRestController: MissingR
         return "createReport"
     }
 
+//    @GetMapping("/{missingReportId}")
+//    fun showMissingReport(
+//        @PathVariable missingReportId: UUID,
+//        model: Model
+//    ): String {
+//        val missingReport = missingReportsRestController.getMissingReport(missingReportId) ?: throw IllegalArgumentException("Missing report $missingReportId")
+//        model.addAttribute("missingReport", missingReport)
+//        return "showReport"
+//    }
+
     @GetMapping("/{missingReportId}")
-    fun showMissingReport(
-        @PathVariable missingReportId: UUID,
-        model: Model
-    ): String {
+    fun ownerMap(model: Model, @PathVariable missingReportId: UUID): String {
         val missingReport = missingReportsRestController.getMissingReport(missingReportId) ?: throw IllegalArgumentException("Missing report $missingReportId")
         model.addAttribute("missingReport", missingReport)
-        return "showReport"
+        return "ownerMap"
     }
+
+    @GetMapping("/{missingReportId}/participantMap")
+    fun participantMap(model: Model, @PathVariable missingReportId: UUID): String {
+        val missingReport = missingReportsRestController.getMissingReport(missingReportId) ?: throw IllegalArgumentException("Missing report $missingReportId")
+        model.addAttribute("missingReport", missingReport)
+        return "participantMap"
+    }
+
+    @GetMapping("accountForm")
+    fun accountForm():String{
+        return "createAccount"
+    }
+
 }
