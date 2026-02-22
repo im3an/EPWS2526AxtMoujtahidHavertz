@@ -25,4 +25,9 @@ class missingreportConrtoller(
         return "participantMap"
     }
 
+    @GetMapping("accountform")
+    fun accountform():String{
+        return "createAccount"
+    }
+
 }
