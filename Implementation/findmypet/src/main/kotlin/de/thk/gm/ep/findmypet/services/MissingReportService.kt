@@ -14,5 +14,6 @@ interface MissingReportService {
     fun delete(missingReportId: UUID)
     fun getByOwnerId(ownerId: UUID): List<MissingReportResponseDto>
     fun getNearbyReports(lat: Double, lon: Double, radius: Double, page: Int, size: Int): Page<MissingReportPreviewResponseDto>
+    fun search(lat: Double?, lon: Double?, radius: Double, petName: String?, species: String?, color: String?, size: String?, age: String?, page: Int, pageSize: Int) : Page<MissingReportPreviewResponseDto>
 
 }

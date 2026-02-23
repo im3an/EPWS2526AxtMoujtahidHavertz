@@ -1,3 +1,6 @@
+<#import "layout.ftlh" as layout>
+
+<@layout.page_layout>
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -328,7 +331,7 @@
 
             if (response.ok) {
                 alert("Erfolgreich erstellt! Viel Glück bei der Suche.");
-                window.location.href = "/dashboard";
+                window.location.href = "/";
             } else {
                 const errorText = await response.text();
                 console.error("Server Antwort:", errorText);
@@ -364,3 +367,4 @@
 
 </body>
 </html>
+</@layout.page_layout>

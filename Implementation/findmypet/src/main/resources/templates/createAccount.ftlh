@@ -1,3 +1,6 @@
+<#import "layout.ftlh" as layout>
+
+<@layout.page_layout>
 <!doctype html>
 <html lang="de">
    <head>
@@ -30,3 +33,4 @@
       <script src="/js/create-user.js"></script>
    </body>
 </html>
+</@layout.page_layout>
