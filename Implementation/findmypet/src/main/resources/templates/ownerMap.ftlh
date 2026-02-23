@@ -43,7 +43,8 @@
         <option value="LOW">low</option>
     </select>
     <button type="button" onclick="deleteArea()"> Delete Area</button>
-    <button type="butten"> Searched</button>
+    <button type="butten" onclick="areaSearched()"> Searched</button>
+    <a id="searchStatus">Not Searched</a>
 </div>
 <div id="createAreaMenu" class="bottomNav">
     <select name="areaType" id="areaType"> 

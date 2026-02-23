@@ -50,7 +50,8 @@ function addAreas(report){
                 data:{
                     id: element.id,
                     active: false,
-                    priority: element.priority
+                    priority: element.priority,
+                    searched: element.searched
                 }
             }).addTo(map).on("click", areaOnClick)
         )
@@ -82,7 +83,8 @@ function activateDrawing(){
         data:{
         id: null,
         active: false,
-        priority: "MEDIUM"}
+        priority: "MEDIUM",
+        searched: false}
     })
     polygonslate.addTo(map)
     console.log("slate created")
@@ -144,7 +146,7 @@ function areaToAPIconverter(area){
     })})
     json = {
         id: area.options.data.id,
-        searched: true,
+        searched: area.options.data.searched,
         lastSearch: null,
         coordinates: coordinates,
         missingReportId: missingReportId,
@@ -192,24 +194,50 @@ async function postArea(){
 }
 
 async function editPriority(prio){
-        try{
-            console.log(prio)
-            url = url = "/api/v1/missing-reports/".concat("",missingReportId).concat("","/areas/").concat("",selectedPoligon.target.options.data.id)
+    try{
+        console.log(prio)
+        url = url = "/api/v1/missing-reports/".concat("",missingReportId).concat("","/areas/").concat("",selectedPoligon.target.options.data.id)
 
-            selectedPoligon.target.options.data.priority = prio
-            selectedPoligon.target.setStyle({color:priorityToCollor(selectedPoligon.target.options.data.priority)})
-            json=areaToAPIconverter(selectedPoligon.target)
-            console.log(json)
-            const response = await fetch(url,{
-                method: "PUT",
-                headers:{"Content-Type":"application/json"},
-                body: JSON.stringify(json)
-                }
-            );
-        }catch(err){
-            console.log(err)
-        }
+        selectedPoligon.target.options.data.priority = prio
+        selectedPoligon.target.setStyle({color:priorityToCollor(selectedPoligon.target.options.data.priority)})
+        json=areaToAPIconverter(selectedPoligon.target)
+        console.log(json)
+        const response = await fetch(url,{
+            method: "PUT",
+            headers:{"Content-Type":"application/json"},
+            body: JSON.stringify(json)
+            }
+        );
+    }catch(err){
+        console.log(err)
+    }
+}
 
+async function areaSearched(){
+    try{
+        const url = "/api/v1/missing-reports/".concat("",missingReportId).concat("","/areas/").concat("",selectedPoligon.target.options.data.id)
+
+        selectedPoligon.target.options.data.searched = true
+        json=areaToAPIconverter(selectedPoligon.target)
+        console.log(json)
+        const response = await fetch(url,{
+            method: "PUT",
+            headers:{"Content-Type":"application/json"},
+            body: JSON.stringify(json)
+            }
+        );
+    }catch(err){
+        console.log(err)
+    }
+}
+
+function searchStatus(){
+    if(selectedPoligon.target.options.data.searched==true){
+        return "durchsucht"
+    }
+    else{
+        return "nicht durchsucht"
+    }
 }
 
 function activateArea(e){
@@ -218,6 +246,8 @@ function activateArea(e){
     e.target.setStyle({color:"#00ff33"})
     document.getElementById("areanav").style.display = "flex"
     selectedPoligon = e
+    document.getElementById("searchStatus").innerHTML = searchStatus();
+
 }
 
 function deactivateArea(e){

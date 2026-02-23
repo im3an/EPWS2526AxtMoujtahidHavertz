@@ -36,7 +36,8 @@
 </div>
 
 <div id="areanav" class="bottomNav">
-    <button type="butten"> Searched</button>
+    <button type="butten" onclick="areaSearched()"> Searched</button>
+    <a id="searchStatus">Not Searched</a>
 </div>
 
 <a id="sideNavBtn" href="#" class="float" onclick="openNav()">
