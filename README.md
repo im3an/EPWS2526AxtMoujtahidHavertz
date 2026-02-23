@@ -10,6 +10,9 @@
 
 </div>
 
+## Railway Deployment:
+[Railway](https://epws2526axtmoujtahidhavertz-production.up.railway.app/)
+
 ## Übersicht
 ### [Artefakte](Artefacts)
 [**Domain Model**](Artefacts/Domain%20Model)
