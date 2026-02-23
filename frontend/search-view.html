@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FindMyPet - Suche</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>FindMyPet</h1>
+        <div class="header-actions">
+            <a href="index.html" class="btn">Zurück</a>
+            <div class="profile-icon"></div>
+        </div>
+    </header>
+
+    <div class="search-view">
+        <aside class="sidebar" id="sidebar">
+            <div class="pet-info" id="petInfo">
+                <p>Laden...</p>
+            </div>
+
+            <div class="collapsible">
+                <div class="collapsible-header" onclick="toggleCollapsible(this)">Bilder</div>
+                <div class="collapsible-content" id="imagesContainer">
+                    <p>Keine Bilder</p>
+                </div>
+            </div>
+
+            <div class="collapsible">
+                <div class="collapsible-header" onclick="toggleCollapsible(this)">Teilnehmer</div>
+                <div class="collapsible-content">
+                    <ul class="participant-list" id="participantsList">
+                        <li>Laden...</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="collapsible">
+                <div class="collapsible-header" onclick="toggleCollapsible(this)">Sichtungen</div>
+                <div class="collapsible-content" id="sightingsList">
+                    <p>Keine Sichtungen</p>
+                </div>
+            </div>
+
+            <div class="collapsible">
+                <div class="collapsible-header" onclick="toggleCollapsible(this)">Kontaktinformationen</div>
+                <div class="collapsible-content" id="contactInfo">
+                    <p>Laden...</p>
+                </div>
+            </div>
+
+            <div class="sidebar-actions" id="sidebarActions"></div>
+        </aside>
+
+        <div class="map-container">
+            <button class="toggle-sidebar" id="toggleBtn" onclick="toggleSidebar()">«</button>
+            <div id="map"></div>
+            
+            <div class="map-controls" id="mapControls" style="display:none;">
+                <div class="area-controls">
+                    <select id="prioritySelect">
+                        <option value="HIGH">Hoch</option>
+                        <option value="MEDIUM">Normal</option>
+                        <option value="LOW">Niedrig</option>
+                    </select>
+                    <button class="icon-btn" onclick="deleteSelectedArea()">🗑</button>
+                    <button class="checkmark" onclick="markAreaSearched()">✓</button>
+                </div>
+                <div class="drawing-controls">
+                    <select id="shapeSelect">
+                        <option value="polygon">Polygon</option>
+                        <option value="circle">Kreis</option>
+                    </select>
+                    <button onclick="prevArea()">←</button>
+                    <button onclick="nextArea()">→</button>
+                    <button onclick="centerOnAreas()">⌄</button>
+                </div>
+            </div>
+
+            <button class="expand-map" onclick="toggleSidebar()">^</button>
+        </div>
+    </div>
+
+    <div class="sighting-modal" id="sightingModal">
+        <div class="modal-content">
+            <h3>Sichtung Melden</h3>
+            <form id="sightingForm">
+                <div class="form-row">
+                    <label>Ort der Sichtung</label>
+                    <div class="form-map" id="sightingMap" style="height:150px;"></div>
+                </div>
+                <div class="form-row">
+                    <label>Zeitpunkt</label>
+                    <input type="datetime-local" id="sightingDateTime" required>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn" onclick="closeSightingModal()">Abbrechen</button>
+                    <button type="submit" class="btn btn-confirm">Melden</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.js"></script>
+    <script src="api.js"></script>
+    <script>
+        var urlParams = new URLSearchParams(window.location.search);
+        var reportId = urlParams.get('id');
+        var isOwner = urlParams.get('role') === 'owner';
+        var currentReport = null;
+
+        var map = L.map('map').setView([50.9375, 6.9603], 14);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap'
+        }).addTo(map);
+
+        var petMarker = null;
+        var drawnItems = new L.FeatureGroup();
+        map.addLayer(drawnItems);
+
+        var areas = [];
+        var currentAreaIndex = -1;
+        var sightingMarkers = [];
+
+        // Load report data
+        if (reportId) {
+            loadReport();
+        } else {
+            document.getElementById('petInfo').innerHTML = '<p>Keine Report-ID angegeben</p>';
+        }
+
+        function loadReport() {
+            API.getMissingReport(reportId)
+                .then(function(report) {
+                    currentReport = report;
+                    renderReport(report);
+                    renderAreas(report.areas);
+                    renderSightings(report.sightings);
+                    renderParticipants(report.participants);
+                    
+                    if (report.location) {
+                        var lat = report.location.latitude;
+                        var lng = report.location.longitude;
+                        map.setView([lat, lng], 14);
+                        
+                        petMarker = L.marker([lat, lng], {
+                            icon: L.divIcon({
+                                className: 'pet-marker',
+                                html: '<div style="width:0;height:0;border-left:15px solid transparent;border-right:15px solid transparent;border-bottom:30px solid #8bc34a;"></div>',
+                                iconSize: [30, 30],
+                                iconAnchor: [15, 30]
+                            })
+                        }).addTo(map);
+                    }
+                })
+                .catch(function(err) {
+                    console.error('Error loading report:', err);
+                    document.getElementById('petInfo').innerHTML = '<p>Fehler beim Laden</p>';
+                });
+        }
+
+        function renderReport(r) {
+            var species = ENUMS.species[r.species] || r.species;
+            var color = ENUMS.petColor[r.primaryColor] || r.primaryColor;
+            var age = ENUMS.ageRange[r.ageRange] || r.ageRange;
+            var size = ENUMS.petSize[r.petSize] || r.petSize;
+
+            document.getElementById('petInfo').innerHTML = 
+                '<strong>Name des Tieres:</strong> ' + r.petName + '<br>' +
+                '<strong>Tier Art:</strong> ' + species + '<br>' +
+                (r.breed ? '<strong>Rasse:</strong> ' + r.breed + '<br>' : '') +
+                '<strong>Fellfarbe:</strong> ' + color + '<br>' +
+                (r.colorDetails ? '<strong>Fell Eigenschaften:</strong> ' + r.colorDetails + '<br>' : '') +
+                '<strong>Größe:</strong> ' + size + '<br>' +
+                '<strong>Alter:</strong> ' + age + '<br>' +
+                (r.chipNumber ? '<strong>ChipNummer:</strong> ' + r.chipNumber + '<br>' : '') +
+                (r.description ? '<strong>Beschreibung:</strong> ' + r.description + '<br>' : '') +
+                '<br><strong>Verlust Datum:</strong> ' + formatDateTime(r.lostDate) + '<br>' +
+                '<strong>Status:</strong> ' + (r.status ? 'Aktiv' : 'Beendet');
+
+            document.getElementById('contactInfo').innerHTML = 
+                '<strong>Besitzer:</strong> ' + r.ownerName;
+
+            if (r.images) {
+                var imgs = r.images.split(',');
+                document.getElementById('imagesContainer').innerHTML = imgs.map(function(img) {
+                    return '<div style="width:60px;height:60px;background:#8ba846;margin:2px;display:inline-block;"></div>';
+                }).join('');
+            }
+        }
+
+        function renderAreas(areaList) {
+            drawnItems.clearLayers();
+            areas = [];
+
+            areaList.forEach(function(area, idx) {
+                var color = ENUMS.priorityColors[area.priority] || '#3388ff';
+                if (area.searched) color = '#888888';
+
+                var layer;
+                if (area.areaType === 'CIRCLE' && area.radius) {
+                    var center = area.coordinates[0];
+                    layer = L.circle([center.latitude, center.longitude], {
+                        radius: area.radius,
+                        color: color,
+                        fillColor: color,
+                        fillOpacity: 0.3
+                    });
+                } else {
+                    var coords = area.coordinates.map(function(c) {
+                        return [c.latitude, c.longitude];
+                    });
+                    layer = L.polygon(coords, {
+                        color: color,
+                        fillColor: color,
+                        fillOpacity: 0.3
+                    });
+                }
+
+                layer.addTo(drawnItems);
+                layer.on('click', function() {
+                    currentAreaIndex = idx;
+                });
+                
+                areas.push({ 
+                    id: area.id, 
+                    layer: layer, 
+                    priority: area.priority, 
+                    searched: area.searched,
+                    data: area
+                });
+            });
+
+            if (areas.length > 0) {
+                currentAreaIndex = 0;
+                map.fitBounds(drawnItems.getBounds());
+            }
+        }
+
+        function renderSightings(sightingList) {
+            sightingMarkers.forEach(function(m) { map.removeLayer(m); });
+            sightingMarkers = [];
+
+            var container = document.getElementById('sightingsList');
+            if (sightingList.length === 0) {
+                container.innerHTML = '<p>Keine Sichtungen</p>';
+                return;
+            }
+
+            container.innerHTML = sightingList.map(function(s) {
+                var marker = L.marker([s.location.latitude, s.location.longitude], {
+                    icon: L.divIcon({
+                        className: 'sighting-marker',
+                        html: '<div style="width:12px;height:12px;background:#ff9800;border-radius:50%;border:2px solid #fff;"></div>',
+                        iconSize: [16, 16],
+                        iconAnchor: [8, 8]
+                    })
+                }).addTo(map);
+                sightingMarkers.push(marker);
+
+                return '<div class="sighting-item">' +
+                    '<small>' + formatDateTime(s.sightingDateTime) + '</small>' +
+                '</div>';
+            }).join('');
+        }
+
+        function renderParticipants(participantList) {
+            var list = document.getElementById('participantsList');
+            if (participantList.length === 0) {
+                list.innerHTML = '<li>Keine Teilnehmer</li>';
+                return;
+            }
+            list.innerHTML = participantList.map(function(p) {
+                return '<li>' + p.name + '</li>';
+            }).join('');
+        }
+
+        // Owner controls
+        if (isOwner) {
+            document.getElementById('mapControls').style.display = 'flex';
+            document.getElementById('sidebarActions').innerHTML = 
+                '<button class="btn" onclick="editPetData()">Tier Daten Ändern</button>' +
+                '<button class="btn" onclick="showInvitation()">Einladung</button>' +
+                '<button class="btn" onclick="endSearch()">Suche Beenden</button>';
+
+            var drawControl = new L.Control.Draw({
+                edit: { featureGroup: drawnItems },
+                draw: {
+                    polygon: true,
+                    circle: true,
+                    rectangle: false,
+                    polyline: false,
+                    marker: true,
+                    circlemarker: false
+                }
+            });
+            map.addControl(drawControl);
+
+            map.on(L.Draw.Event.CREATED, function(e) {
+                var layer = e.layer;
+                var priority = document.getElementById('prioritySelect').value;
+                var color = ENUMS.priorityColors[priority] || '#3388ff';
+
+                layer.setStyle({ color: color, fillColor: color, fillOpacity: 0.3 });
+                
+                var areaData = {
+                    searched: false,
+                    lastSearch: null,
+                    radius: null,
+                    areaType: 'POLYGON',
+                    coordinates: [],
+                    priority: priority
+                };
+
+                if (layer instanceof L.Circle) {
+                    areaData.areaType = 'CIRCLE';
+                    areaData.radius = layer.getRadius();
+                    areaData.coordinates = [{
+                        latitude: layer.getLatLng().lat,
+                        longitude: layer.getLatLng().lng
+                    }];
+                } else {
+                    var latlngs = layer.getLatLngs()[0];
+                    areaData.coordinates = latlngs.map(function(ll) {
+                        return { latitude: ll.lat, longitude: ll.lng };
+                    });
+                }
+
+                API.createArea(reportId, areaData)
+                    .then(function(savedArea) {
+                        drawnItems.addLayer(layer);
+                        areas.push({ 
+                            id: savedArea.id, 
+                            layer: layer, 
+                            priority: priority, 
+                            searched: false,
+                            data: savedArea
+                        });
+                        currentAreaIndex = areas.length - 1;
+                    })
+                    .catch(function(err) {
+                        console.error('Error saving area:', err);
+                        alert('Fehler beim Speichern des Gebiets');
+                    });
+            });
+        } else {
+            document.getElementById('sidebarActions').innerHTML = 
+                '<button class="btn" onclick="openSightingModal()">Sichtung Meldung</button>';
+        }
+
+        function toggleSidebar() {
+            var sidebar = document.getElementById('sidebar');
+            var btn = document.getElementById('toggleBtn');
+            sidebar.classList.toggle('collapsed');
+            btn.textContent = sidebar.classList.contains('collapsed') ? '»' : '«';
+            setTimeout(function() { map.invalidateSize(); }, 300);
+        }
+
+        function toggleCollapsible(header) {
+            header.parentElement.classList.toggle('closed');
+        }
+
+        function deleteSelectedArea() {
+            if (currentAreaIndex >= 0 && areas[currentAreaIndex]) {
+                var area = areas[currentAreaIndex];
+                API.deleteArea(reportId, area.id)
+                    .then(function() {
+                        drawnItems.removeLayer(area.layer);
+                        areas.splice(currentAreaIndex, 1);
+                        currentAreaIndex = Math.min(currentAreaIndex, areas.length - 1);
+                    })
+                    .catch(function(err) {
+                        console.error('Error deleting area:', err);
+                    });
+            }
+        }
+
+        function markAreaSearched() {
+            if (currentAreaIndex >= 0 && areas[currentAreaIndex]) {
+                var area = areas[currentAreaIndex];
+                var updateData = {
+                    searched: true,
+                    lastSearch: new Date().toISOString(),
+                    radius: area.data.radius,
+                    areaType: area.data.areaType,
+                    coordinates: area.data.coordinates.map(function(c) {
+                        return { latitude: c.latitude, longitude: c.longitude };
+                    }),
+                    priority: area.priority
+                };
+
+                API.updateArea(reportId, area.id, updateData)
+                    .then(function() {
+                        area.searched = true;
+                        area.layer.setStyle({ color: '#888888', fillColor: '#888888' });
+                    })
+                    .catch(function(err) {
+                        console.error('Error updating area:', err);
+                    });
+            }
+        }
+
+        function prevArea() {
+            if (currentAreaIndex > 0) {
+                currentAreaIndex--;
+                map.fitBounds(areas[currentAreaIndex].layer.getBounds());
+            }
+        }
+
+        function nextArea() {
+            if (currentAreaIndex < areas.length - 1) {
+                currentAreaIndex++;
+                map.fitBounds(areas[currentAreaIndex].layer.getBounds());
+            }
+        }
+
+        function centerOnAreas() {
+            if (drawnItems.getLayers().length > 0) {
+                map.fitBounds(drawnItems.getBounds());
+            }
+        }
+
+        function editPetData() {
+            alert('Bearbeitung noch nicht implementiert');
+        }
+
+        function showInvitation() {
+            API.createInvitation(reportId)
+                .then(function(inv) {
+                    var url = window.location.origin + '/join.html?token=' + inv.token;
+                    alert('Einladungslink:\n\n' + url + '\n\nToken: ' + inv.token);
+                })
+                .catch(function(err) {
+                    console.error('Error creating invitation:', err);
+                    alert('Fehler beim Erstellen der Einladung');
+                });
+        }
+
+        function endSearch() {
+            if (confirm('Möchten Sie die Suche wirklich beenden?')) {
+                var updateData = Object.assign({}, currentReport);
+                updateData.status = false;
+                updateData.location = {
+                    latitude: currentReport.location.latitude,
+                    longitude: currentReport.location.longitude
+                };
+                
+                API.updateMissingReport(reportId, updateData)
+                    .then(function() {
+                        alert('Suche beendet');
+                        window.location.href = 'index.html';
+                    })
+                    .catch(function(err) {
+                        console.error('Error:', err);
+                    });
+            }
+        }
+
+        // Sighting modal
+        var sightingMap = null;
+        var sightingMarker = null;
+        var sightingLocation = null;
+
+        function openSightingModal() {
+            document.getElementById('sightingModal').classList.add('active');
+            
+            var now = new Date();
+            now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+            document.getElementById('sightingDateTime').value = now.toISOString().slice(0, 16);
+
+            setTimeout(function() {
+                if (!sightingMap) {
+                    sightingMap = L.map('sightingMap').setView([50.9375, 6.9603], 13);
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(sightingMap);
+                    
+                    sightingMap.on('click', function(e) {
+                        if (sightingMarker) sightingMap.removeLayer(sightingMarker);
+                        sightingMarker = L.marker(e.latlng).addTo(sightingMap);
+                        sightingLocation = { latitude: e.latlng.lat, longitude: e.latlng.lng };
+                    });
+                }
+                sightingMap.invalidateSize();
+                
+                if (currentReport && currentReport.location) {
+                    sightingMap.setView([currentReport.location.latitude, currentReport.location.longitude], 14);
+                }
+            }, 100);
+        }
+
+        function closeSightingModal() {
+            document.getElementById('sightingModal').classList.remove('active');
+            sightingLocation = null;
+            if (sightingMarker && sightingMap) {
+                sightingMap.removeLayer(sightingMarker);
+                sightingMarker = null;
+            }
+        }
+
+        document.getElementById('sightingForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            if (!sightingLocation) {
+                alert('Bitte markieren Sie den Ort auf der Karte');
+                return;
+            }
+
+            var accountId = null;
+            var singleUse = localStorage.getItem('singleUseParticipant');
+            if (singleUse) {
+                try {
+                    var p = JSON.parse(singleUse);
+                    if (p.reportId === reportId) accountId = p.id;
+                } catch (e) {}
+            }
+            if (!accountId) {
+                var user = localStorage.getItem('currentUser');
+                if (user) {
+                    try {
+                        accountId = JSON.parse(user).id;
+                    } catch (e) {}
+                }
+            }
+            if (!accountId) {
+                alert('Bitte melden Sie sich an oder nutzen Sie den Einladungslink.');
+                return;
+            }
+
+            var data = {
+                location: sightingLocation,
+                sightingDateTime: document.getElementById('sightingDateTime').value,
+                accountId: accountId
+            };
+
+            API.createSighting(reportId, data)
+                .then(function() {
+                    alert('Sichtung gemeldet! Vielen Dank.');
+                    closeSightingModal();
+                    loadReport();
+                })
+                .catch(function(err) {
+                    console.error('Error:', err);
+                    alert('Fehler: ' + (err.message || JSON.stringify(err)));
+                });
+        });
+    </script>
+</body>
+</html>

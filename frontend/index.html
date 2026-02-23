@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FindMyPet</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .profile-menu {
+            position: absolute;
+            top: 60px;
+            right: 20px;
+            background: #fff;
+            border: 1px solid #999;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            min-width: 180px;
+            z-index: 1000;
+        }
+        .profile-menu-header {
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+        .profile-menu-header strong {
+            display: block;
+        }
+        .profile-menu-header small {
+            color: #666;
+        }
+        .profile-menu a {
+            display: block;
+            padding: 12px 15px;
+            color: #333;
+            text-decoration: none;
+        }
+        .profile-menu a:hover {
+            background: #f0f0f0;
+        }
+        .profile-icon.logged-in {
+            background: #4a7c4e;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>FindMyPet</h1>
+        <div class="header-actions" id="headerActions">
+            <a href="create-search.html" class="btn">Suche Erstellen</a>
+            <a href="login.html" class="btn" id="loginBtn">Anmelden</a>
+            <div class="profile-icon" id="profileIcon" onclick="showProfileMenu()" style="display:none;"></div>
+        </div>
+    </header>
+
+    <div class="profile-menu" id="profileMenu" style="display:none;">
+        <div class="profile-menu-header">
+            <strong id="profileName">Benutzer</strong>
+            <small id="profileEmail">email@example.de</small>
+        </div>
+        <a href="profile.html">Mein Profil</a>
+        <a href="#" onclick="logout()">Abmelden</a>
+    </div>
+
+    <div class="filter-bar">
+        <span>Sortieren nach</span>
+        <select id="filterSpecies" onchange="filterReports()">
+            <option value="">Art</option>
+            <option value="DOG">Hund</option>
+            <option value="CAT">Katze</option>
+            <option value="OTHER">Andere</option>
+        </select>
+        <select id="filterColor" onchange="filterReports()">
+            <option value="">Farbe</option>
+            <option value="BLACK">Schwarz</option>
+            <option value="WHITE">Weiß</option>
+            <option value="BROWN">Braun</option>
+            <option value="GRAY">Grau</option>
+            <option value="ORANGE">Orange</option>
+        </select>
+        <span>...</span>
+    </div>
+
+    <main class="dashboard">
+        <section class="pet-section">
+            <h2>Private Vermisstenanzeigen</h2>
+            <div class="pet-grid" id="privateReports">
+                <p class="loading">Laden...</p>
+            </div>
+        </section>
+
+        <section class="pet-section">
+            <h2>Öffentliche Vermisstenanzeigen</h2>
+            <div class="pet-grid" id="publicReports">
+                <p class="loading">Laden...</p>
+            </div>
+        </section>
+    </main>
+
+    <script src="api.js"></script>
+    <script>
+        var allReports = [];
+
+        function loadReports() {
+            API.getMissingReports()
+                .then(function(reports) {
+                    allReports = reports;
+                    renderReports(reports);
+                })
+                .catch(function(err) {
+                    console.error('Error loading reports:', err);
+                    document.getElementById('privateReports').innerHTML = '<p>Keine privaten Anzeigen</p>';
+                    document.getElementById('publicReports').innerHTML = '<p>Fehler beim Laden oder keine Anzeigen vorhanden</p>';
+                });
+        }
+
+        function renderReports(reports) {
+            var privateGrid = document.getElementById('privateReports');
+            var publicGrid = document.getElementById('publicReports');
+
+            var privateReports = reports.filter(function(r) { return !r.isPublic && r.status; });
+            var publicReports = reports.filter(function(r) { return r.isPublic && r.status; });
+
+            if (privateReports.length === 0) {
+                privateGrid.innerHTML = '<p>Keine privaten Anzeigen</p>';
+            } else {
+                privateGrid.innerHTML = privateReports.map(function(r) {
+                    return createPetCard(r, true);
+                }).join('');
+            }
+
+            if (publicReports.length === 0) {
+                publicGrid.innerHTML = '<p>Keine öffentlichen Anzeigen</p>';
+            } else {
+                publicGrid.innerHTML = publicReports.map(function(r) {
+                    return createPetCard(r, false);
+                }).join('');
+            }
+        }
+
+        function createPetCard(report, isOwn) {
+            var colorClass = isOwn ? 'own' : '';
+            var role = isOwn ? 'owner' : 'participant';
+            var speciesDisplay = ENUMS.species[report.species] || report.species;
+            
+            return '<a href="search-view.html?id=' + report.id + '&role=' + role + '" class="pet-card ' + colorClass + '">' +
+                '<div class="pet-image ' + colorClass + '"></div>' +
+                '<span>' + report.petName + '</span>' +
+                '<small>' + speciesDisplay + '</small>' +
+            '</a>';
+        }
+
+        function filterReports() {
+            var species = document.getElementById('filterSpecies').value;
+            var color = document.getElementById('filterColor').value;
+
+            var filtered = allReports.filter(function(r) {
+                if (species && r.species !== species) return false;
+                if (color && r.primaryColor !== color) return false;
+                return true;
+            });
+
+            renderReports(filtered);
+        }
+
+        loadReports();
+
+        // User authentication state
+        function checkUserState() {
+            var userJson = localStorage.getItem('currentUser');
+            var loginBtn = document.getElementById('loginBtn');
+            var profileIcon = document.getElementById('profileIcon');
+
+            if (userJson) {
+                var user = JSON.parse(userJson);
+                loginBtn.style.display = 'none';
+                profileIcon.style.display = 'block';
+                profileIcon.classList.add('logged-in');
+                
+                if (user.profileImage) {
+                    profileIcon.style.backgroundImage = 'url(' + user.profileImage + ')';
+                    profileIcon.style.backgroundSize = 'cover';
+                }
+
+                document.getElementById('profileName').textContent = user.firstname || user.name;
+                document.getElementById('profileEmail').textContent = user.email;
+            } else {
+                loginBtn.style.display = 'inline-block';
+                profileIcon.style.display = 'none';
+            }
+        }
+
+        function showProfileMenu() {
+            var menu = document.getElementById('profileMenu');
+            menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function logout() {
+            localStorage.removeItem('currentUser');
+            window.location.reload();
+        }
+
+        // Close menu when clicking outside
+        document.addEventListener('click', function(e) {
+            var menu = document.getElementById('profileMenu');
+            var icon = document.getElementById('profileIcon');
+            if (!menu.contains(e.target) && e.target !== icon) {
+                menu.style.display = 'none';
+            }
+        });
+
+        checkUserState();
+    </script>
+</body>
+</html>

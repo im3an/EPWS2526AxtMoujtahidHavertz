@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FindMyPet - Registrieren</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .register-page {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        .register-page h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: normal;
+        }
+
+        .profile-upload {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .profile-preview {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: #8b3a3a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            overflow: hidden;
+            border: 3px solid #999;
+            margin-bottom: 10px;
+        }
+
+        .profile-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-preview span {
+            color: #fff;
+            font-size: 14px;
+        }
+
+        .section-title {
+            font-size: 14px;
+            color: #666;
+            margin: 20px 0 10px 0;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #999;
+        }
+
+        .form-row-inline {
+            display: flex;
+            gap: 10px;
+        }
+
+        .form-row-inline .form-field {
+            flex: 1;
+        }
+
+        .form-field {
+            margin-bottom: 15px;
+        }
+
+        .form-field label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 13px;
+            color: #333;
+        }
+
+        .form-field input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #999;
+            background: #ccc;
+            font-size: 14px;
+        }
+
+        .form-field input:focus {
+            outline: 2px solid #4a7c4e;
+            background: #ddd;
+        }
+
+        .form-field .hint {
+            font-size: 11px;
+            color: #666;
+            margin-top: 3px;
+        }
+
+        .form-field.error input {
+            border-color: #c44;
+        }
+
+        .form-field .error-msg {
+            color: #c44;
+            font-size: 12px;
+            margin-top: 3px;
+        }
+
+        .register-actions {
+            margin-top: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .btn-register {
+            padding: 12px;
+            font-size: 16px;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .login-link a {
+            color: #4a7c4e;
+        }
+
+        .password-strength {
+            height: 4px;
+            background: #ddd;
+            margin-top: 5px;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .password-strength-bar {
+            height: 100%;
+            width: 0;
+            transition: width 0.3s, background 0.3s;
+        }
+
+        .password-strength-bar.weak { width: 33%; background: #c44; }
+        .password-strength-bar.medium { width: 66%; background: #ca4; }
+        .password-strength-bar.strong { width: 100%; background: #4a7c4e; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>FindMyPet</h1>
+        <div class="header-actions">
+            <a href="index.html" class="btn">Zurück</a>
+        </div>
+    </header>
+
+    <main class="register-page">
+        <h2>Konto erstellen</h2>
+
+        <form id="registerForm">
+            <div class="profile-upload">
+                <div class="profile-preview" id="profilePreview" onclick="selectProfileImage()">
+                    <span>+ Foto</span>
+                </div>
+                <small>Profilbild hochladen (optional)</small>
+            </div>
+
+            <div class="section-title">Kontodaten</div>
+
+            <div class="form-field">
+                <label for="username">Benutzername*</label>
+                <input type="text" id="username" placeholder="Benutzername zum Einloggen" required minlength="3" maxlength="15">
+                <div class="hint">3-15 Zeichen</div>
+            </div>
+
+            <div class="form-field">
+                <label for="email">E-Mail*</label>
+                <input type="email" id="email" placeholder="ihre@email.de" required>
+            </div>
+
+            <div class="form-field">
+                <label for="password">Passwort*</label>
+                <input type="password" id="password" placeholder="Mindestens 8 Zeichen" required minlength="8" maxlength="35" oninput="checkPasswordStrength()">
+                <div class="password-strength">
+                    <div class="password-strength-bar" id="passwordStrength"></div>
+                </div>
+                <div class="hint">8-35 Zeichen</div>
+            </div>
+
+            <div class="form-field">
+                <label for="passwordConfirm">Passwort bestätigen*</label>
+                <input type="password" id="passwordConfirm" placeholder="Passwort wiederholen" required>
+            </div>
+
+            <div class="section-title">Persönliche Daten (optional)</div>
+
+            <div class="form-row-inline">
+                <div class="form-field">
+                    <label for="firstname">Vorname</label>
+                    <input type="text" id="firstname" placeholder="Max" minlength="2" maxlength="30">
+                </div>
+                <div class="form-field">
+                    <label for="surname">Nachname</label>
+                    <input type="text" id="surname" placeholder="Mustermann" minlength="2" maxlength="20">
+                </div>
+            </div>
+
+            <div class="form-field">
+                <label for="phone">Telefonnummer</label>
+                <input type="tel" id="phone" placeholder="+49 123 456789">
+                <div class="hint">Für Kontaktaufnahme bei Sichtungen</div>
+            </div>
+
+            <div class="section-title">Adresse (optional)</div>
+
+            <div class="form-field">
+                <label for="street">Straße und Hausnummer</label>
+                <input type="text" id="street" placeholder="Musterstraße 123">
+            </div>
+
+            <div class="form-row-inline">
+                <div class="form-field" style="flex: 0.4;">
+                    <label for="zipCode">PLZ</label>
+                    <input type="text" id="zipCode" placeholder="50667">
+                </div>
+                <div class="form-field" style="flex: 1;">
+                    <label for="city">Stadt</label>
+                    <input type="text" id="city" placeholder="Köln">
+                </div>
+            </div>
+
+            <div class="register-actions">
+                <button type="submit" class="btn btn-confirm btn-register" id="submitBtn">Registrieren</button>
+                <a href="index.html" class="btn" style="text-align:center;">Abbrechen</a>
+            </div>
+        </form>
+
+        <div class="login-link">
+            Bereits registriert? <a href="login.html">Jetzt anmelden</a>
+        </div>
+    </main>
+
+    <input type="file" id="profileInput" accept="image/*" style="display:none" onchange="handleProfileImage(event)">
+
+    <script src="api.js"></script>
+    <script>
+        var profileImageData = null;
+
+        function selectProfileImage() {
+            document.getElementById('profileInput').click();
+        }
+
+        function handleProfileImage(event) {
+            var file = event.target.files[0];
+            if (file) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    profileImageData = e.target.result;
+                    var preview = document.getElementById('profilePreview');
+                    preview.innerHTML = '<img src="' + e.target.result + '" alt="Profilbild">';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function checkPasswordStrength() {
+            var password = document.getElementById('password').value;
+            var bar = document.getElementById('passwordStrength');
+            bar.className = 'password-strength-bar';
+
+            if (password.length < 8) {
+                bar.className = 'password-strength-bar';
+                return;
+            }
+
+            var strength = 0;
+            if (password.length >= 8) strength++;
+            if (password.length >= 12) strength++;
+            if (/[A-Z]/.test(password)) strength++;
+            if (/[0-9]/.test(password)) strength++;
+            if (/[^A-Za-z0-9]/.test(password)) strength++;
+
+            if (strength <= 2) {
+                bar.className = 'password-strength-bar weak';
+            } else if (strength <= 4) {
+                bar.className = 'password-strength-bar medium';
+            } else {
+                bar.className = 'password-strength-bar strong';
+            }
+        }
+
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            var password = document.getElementById('password').value;
+            var passwordConfirm = document.getElementById('passwordConfirm').value;
+
+            if (password !== passwordConfirm) {
+                alert('Passwörter stimmen nicht überein!');
+                return;
+            }
+
+            var submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Wird registriert...';
+
+            var street = document.getElementById('street').value;
+            var city = document.getElementById('city').value;
+            var zipCode = document.getElementById('zipCode').value;
+
+            var hasAddress = street && city && zipCode;
+
+            var userData = {
+                name: document.getElementById('username').value,
+                email: document.getElementById('email').value,
+                password: password,
+                firstname: document.getElementById('firstname').value || null,
+                surname: document.getElementById('surname').value || null,
+                phoneNumber: document.getElementById('phone').value || null,
+                address: hasAddress ? {
+                    street: street,
+                    city: city,
+                    zipCode: zipCode,
+                    countryCode: 'DE'
+                } : null
+            };
+
+            fetch('/api/v1/accounts/users', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(userData)
+            })
+            .then(function(res) {
+                if (!res.ok) {
+                    var contentType = res.headers.get('content-type');
+                    if (contentType && contentType.includes('application/json')) {
+                        return res.json().then(function(err) { throw err; });
+                    } else {
+                        throw new Error('Serverfehler: ' + res.status);
+                    }
+                }
+                return res.json();
+            })
+            .then(function(user) {
+                // Store user info in localStorage
+                localStorage.setItem('currentUser', JSON.stringify({
+                    id: user.id,
+                    name: user.name,
+                    email: user.email,
+                    profileImage: profileImageData
+                }));
+
+                alert('Registrierung erfolgreich! Willkommen bei FindMyPet.');
+                window.location.href = 'index.html';
+            })
+            .catch(function(err) {
+                console.error('Registration error:', err);
+                var message = 'Registrierung fehlgeschlagen.';
+                if (err.message) {
+                    message += ' ' + err.message;
+                } else if (typeof err === 'object') {
+                    message += ' ' + JSON.stringify(err);
+                }
+                alert(message);
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Registrieren';
+            });
+        });
+    </script>
+</body>
+</html>

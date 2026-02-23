@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FindMyPet - Suche Erstellen</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>FindMyPet</h1>
+        <div class="header-actions">
+            <a href="index.html" class="btn">Suche Abbrechen</a>
+            <button class="btn btn-confirm" onclick="submitForm()">Suche Bestätigen ✓</button>
+            <div class="profile-icon"></div>
+        </div>
+    </header>
+
+    <main class="form-page">
+        <form id="searchForm">
+            <div class="form-row">
+                <label>Name des Tieres*</label>
+                <input type="text" id="petName" placeholder="Name eingeben..." required minlength="2" maxlength="35">
+            </div>
+
+            <div class="form-row">
+                <label>Rasse</label>
+                <input type="text" id="breed" placeholder="Rasse eingeben...">
+            </div>
+
+            <div class="form-row">
+                <label>Alter*</label>
+                <select id="ageRange" required>
+                    <option value="">Bitte wählen...</option>
+                    <option value="BABY">Welpe/Kitten</option>
+                    <option value="YOUNG">Jung (1-3 Jahre)</option>
+                    <option value="ADULT">Erwachsen (3-7 Jahre)</option>
+                    <option value="SENIOR">Senior (7+ Jahre)</option>
+                </select>
+            </div>
+
+            <div class="form-row">
+                <label>Tier Art*</label>
+                <select id="species" required>
+                    <option value="">Bitte wählen...</option>
+                    <option value="DOG">Hund</option>
+                    <option value="CAT">Katze</option>
+                    <option value="OTHER">Sonstiges</option>
+                </select>
+            </div>
+
+            <div class="form-row">
+                <label>Fellfarbe*</label>
+                <select id="primaryColor" required onchange="updateColorPreview()">
+                    <option value="">Bitte wählen...</option>
+                    <option value="BLACK">Schwarz</option>
+                    <option value="WHITE">Weiß</option>
+                    <option value="BROWN">Braun</option>
+                    <option value="GRAY">Grau</option>
+                    <option value="ORANGE">Orange/Rot</option>
+                    <option value="CREME">Beige/Creme</option>
+                    <option value="TRICOLOR">Dreifarbig</option>
+                    <option value="OTHER">Sonstige</option>
+                </select>
+                <div class="color-preview" id="colorPreview"></div>
+                <span>Farbe</span>
+            </div>
+
+            <div class="form-row">
+                <label>Fell Eigenschaften</label>
+                <input type="text" id="colorDetails" placeholder="z.B. kurz, lang, gelockt...">
+            </div>
+
+            <div class="form-row">
+                <label>Größe*</label>
+                <select id="petSize" required>
+                    <option value="">Bitte wählen...</option>
+                    <option value="VERYSMALL">Sehr klein</option>
+                    <option value="SMALL">Klein</option>
+                    <option value="MEDIUM">Mittel</option>
+                    <option value="LARGE">Groß</option>
+                    <option value="VERYLARGE">Sehr Groß</option>
+                </select>
+            </div>
+
+            <div class="form-row">
+                <label>Chip Nummer</label>
+                <input type="text" id="chipNumber" placeholder="Chip Nummer eingeben...">
+            </div>
+
+            <div class="form-row">
+                <label>Unterkumpf*</label>
+                <div class="form-map" id="locationMap"></div>
+                <small id="locationHint">Klicken Sie auf die Karte um den Ort zu markieren</small>
+            </div>
+
+            <div class="form-row">
+                <label>Beschreibung</label>
+                <textarea id="description" placeholder="Beschreiben Sie Ihr Tier..."></textarea>
+            </div>
+
+            <div class="form-row">
+                <label>Bilder</label>
+                <div class="image-grid">
+                    <div class="image-slot" onclick="selectImage(this)">+</div>
+                    <div class="image-slot" onclick="selectImage(this)">+</div>
+                    <div class="image-slot" onclick="selectImage(this)">+</div>
+                    <div class="image-slot" onclick="selectImage(this)">+</div>
+                    <div class="image-slot" onclick="selectImage(this)">+</div>
+                    <div class="image-slot" onclick="selectImage(this)">+</div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <label>Verlust Datum*</label>
+                <div class="calendar-input">
+                    <input type="datetime-local" id="lostDate" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <label>Öffentliche Suche*</label>
+                <div class="toggle-group">
+                    <button type="button" class="toggle-btn yes active" onclick="setPublic(true, this)">Ja</button>
+                    <button type="button" class="toggle-btn no" onclick="setPublic(false, this)">Nein</button>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <a href="index.html" class="btn">Suche Abbrechen</a>
+                <button type="submit" class="btn btn-confirm" id="submitBtn">Suche Bestätigen</button>
+            </div>
+        </form>
+    </main>
+
+    <input type="file" id="imageInput" accept="image/*" style="display:none" onchange="handleImage(event)">
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="api.js"></script>
+    <script>
+        var map = L.map('locationMap').setView([50.9375, 6.9603], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap'
+        }).addTo(map);
+
+        var marker = null;
+        var selectedLocation = null;
+
+        map.on('click', function(e) {
+            if (marker) map.removeLayer(marker);
+            marker = L.marker(e.latlng).addTo(map);
+            selectedLocation = { latitude: e.latlng.lat, longitude: e.latlng.lng };
+            document.getElementById('locationHint').textContent = 'Ort: ' + e.latlng.lat.toFixed(5) + ', ' + e.latlng.lng.toFixed(5);
+        });
+
+        var isPublic = true;
+        var currentImageSlot = null;
+        var images = [];
+
+        var colorMap = {
+            'BLACK': '#000000',
+            'WHITE': '#ffffff',
+            'BROWN': '#8b4513',
+            'GRAY': '#808080',
+            'ORANGE': '#d2691e',
+            'CREME': '#f5deb3',
+            'TRICOLOR': '#8b4a4a',
+            'OTHER': '#999999'
+        };
+
+        function updateColorPreview() {
+            var select = document.getElementById('primaryColor');
+            var preview = document.getElementById('colorPreview');
+            preview.style.background = colorMap[select.value] || '#8b4a4a';
+        }
+
+        function setPublic(value, btn) {
+            isPublic = value;
+            document.querySelectorAll('.toggle-btn').forEach(function(b) {
+                b.classList.remove('active');
+            });
+            btn.classList.add('active');
+        }
+
+        function selectImage(slot) {
+            currentImageSlot = slot;
+            document.getElementById('imageInput').click();
+        }
+
+        function handleImage(event) {
+            if (event.target.files && event.target.files[0] && currentImageSlot) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    currentImageSlot.style.backgroundImage = 'url(' + e.target.result + ')';
+                    currentImageSlot.style.backgroundSize = 'cover';
+                    currentImageSlot.textContent = '';
+                    images.push(e.target.result);
+                };
+                reader.readAsDataURL(event.target.files[0]);
+            }
+        }
+
+        function submitForm() {
+            document.getElementById('searchForm').dispatchEvent(new Event('submit', { cancelable: true }));
+        }
+
+        document.getElementById('searchForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            if (!selectedLocation) {
+                alert('Bitte wählen Sie einen Ort auf der Karte');
+                return;
+            }
+
+            var submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Wird erstellt...';
+
+            // Get logged in user from localStorage
+            var currentUser = localStorage.getItem('currentUser');
+            var ownerId = null;
+            if (currentUser) {
+                try {
+                    ownerId = JSON.parse(currentUser).id;
+                } catch(e) {
+                    console.warn('Could not parse currentUser:', e);
+                }
+            }
+
+            if (!ownerId) {
+                alert('Bitte melden Sie sich zuerst an!');
+                window.location.href = 'login.html';
+                return;
+            }
+
+            var data = {
+                petName: document.getElementById('petName').value,
+                species: document.getElementById('species').value,
+                breed: document.getElementById('breed').value || null,
+                primaryColor: document.getElementById('primaryColor').value,
+                colorDetails: document.getElementById('colorDetails').value || null,
+                petSize: document.getElementById('petSize').value,
+                ageRange: document.getElementById('ageRange').value,
+                chipNumber: document.getElementById('chipNumber').value || null,
+                description: document.getElementById('description').value || null,
+                images: images.length > 0 ? images.join(',') : null,
+                lostDate: document.getElementById('lostDate').value,
+                location: selectedLocation,
+                isPublic: isPublic,
+                status: true,
+                ownerId: ownerId
+            };
+
+            API.createMissingReport(data)
+                .then(function(response) {
+                    alert('Suche erfolgreich erstellt!');
+                    window.location.href = 'search-view.html?id=' + response.id + '&role=owner';
+                })
+                .catch(function(err) {
+                    console.error('Error:', err);
+                    alert('Fehler beim Erstellen: ' + (err.message || JSON.stringify(err)));
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Suche Bestätigen';
+                });
+        });
+
+        // Set default date to now
+        var now = new Date();
+        now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+        document.getElementById('lostDate').value = now.toISOString().slice(0, 16);
+    </script>
+</body>
+</html>

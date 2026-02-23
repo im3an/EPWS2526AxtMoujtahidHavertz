@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FindMyPet - Anmelden</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .login-page {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 50px 20px;
+        }
+
+        .login-page h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: normal;
+        }
+
+        .form-field {
+            margin-bottom: 20px;
+        }
+
+        .form-field label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .form-field input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #999;
+            background: #ccc;
+            font-size: 14px;
+        }
+
+        .form-field input:focus {
+            outline: 2px solid #4a7c4e;
+            background: #ddd;
+        }
+
+        .login-actions {
+            margin-top: 30px;
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 14px;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 14px;
+        }
+
+        .register-link a {
+            color: #4a7c4e;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo h1 {
+            font-size: 36px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>FindMyPet</h1>
+        <div class="header-actions">
+            <a href="index.html" class="btn">Zurück</a>
+        </div>
+    </header>
+
+    <main class="login-page">
+        <div class="logo">
+            <h1>🐾</h1>
+        </div>
+
+        <h2>Anmelden</h2>
+
+        <form id="loginForm">
+            <div class="form-field">
+                <label for="username">Benutzername oder E-Mail</label>
+                <input type="text" id="username" placeholder="Benutzername" required>
+            </div>
+
+            <div class="form-field">
+                <label for="password">Passwort</label>
+                <input type="password" id="password" placeholder="Passwort" required>
+            </div>
+
+            <div class="login-actions">
+                <button type="submit" class="btn btn-confirm btn-login" id="submitBtn">Anmelden</button>
+            </div>
+        </form>
+
+        <div class="register-link">
+            Noch kein Konto? <a href="register.html">Jetzt registrieren</a>
+        </div>
+    </main>
+
+    <script src="api.js"></script>
+    <script>
+        // Check if already logged in
+        var currentUser = localStorage.getItem('currentUser');
+        if (currentUser) {
+            window.location.href = 'index.html';
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            var username = document.getElementById('username').value;
+            var password = document.getElementById('password').value;
+            var submitBtn = document.getElementById('submitBtn');
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Wird angemeldet...';
+
+            // Fetch all users and find matching one (simple auth for demo)
+            fetch('/api/v1/accounts/users')
+                .then(function(res) {
+                    if (!res.ok) throw new Error('Serverfehler: ' + res.status);
+                    return res.json();
+                })
+                .then(function(users) {
+                    var user = users.find(function(u) {
+                        return (u.name === username || u.email === username);
+                    });
+
+                    if (user) {
+                        // Store user info
+                        localStorage.setItem('currentUser', JSON.stringify({
+                            id: user.id,
+                            name: user.name,
+                            email: user.email,
+                            firstname: user.firstname,
+                            surname: user.surname
+                        }));
+
+                        alert('Willkommen zurück, ' + (user.firstname || user.name) + '!');
+                        window.location.href = 'index.html';
+                    } else {
+                        alert('Benutzer nicht gefunden.');
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = 'Anmelden';
+                    }
+                })
+                .catch(function(err) {
+                    console.error('Login error:', err);
+                    alert('Anmeldung fehlgeschlagen.');
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Anmelden';
+                });
+        });
+    </script>
+</body>
+</html>

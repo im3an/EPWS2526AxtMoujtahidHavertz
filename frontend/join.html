@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FindMyPet - Mithelfen</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .join-page {
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        .join-page h2 {
+            text-align: center;
+            margin-bottom: 10px;
+            font-weight: normal;
+        }
+
+        .join-page .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .pet-card-join {
+            background: #fff;
+            border: 1px solid #999;
+            padding: 24px;
+            margin-bottom: 30px;
+        }
+
+        .pet-card-join .pet-name {
+            font-size: 22px;
+            margin-bottom: 8px;
+        }
+
+        .pet-card-join .pet-meta {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .pet-card-join .pet-desc {
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .join-form .form-field {
+            margin-bottom: 20px;
+        }
+
+        .join-form label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+
+        .join-form input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #999;
+            background: #ccc;
+            font-size: 14px;
+        }
+
+        .join-form input:focus {
+            outline: 2px solid #4a7c4e;
+            background: #ddd;
+        }
+
+        .join-form .hint {
+            font-size: 12px;
+            color: #666;
+            margin-top: 4px;
+        }
+
+        .join-actions {
+            margin-top: 24px;
+        }
+
+        .join-actions .btn {
+            width: 100%;
+            padding: 14px;
+            font-size: 16px;
+        }
+
+        .join-error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .join-loading {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>FindMyPet</h1>
+        <div class="header-actions">
+            <a href="index.html" class="btn">Startseite</a>
+        </div>
+    </header>
+
+    <main class="join-page">
+        <div id="joinLoading" class="join-loading">
+            Einladung wird geladen...
+        </div>
+
+        <div id="joinError" class="join-error" style="display:none;"></div>
+
+        <div id="joinContent" style="display:none;">
+            <h2>Hilf mit, dieses Tier zu finden</h2>
+            <p class="subtitle">Gib deinen Namen ein und nimm an der Suche teil.</p>
+
+            <div class="pet-card-join" id="petCard">
+                <div class="pet-name" id="petName">—</div>
+                <div class="pet-meta" id="petMeta">—</div>
+                <div class="pet-desc" id="petDesc">—</div>
+            </div>
+
+            <form id="joinForm" class="join-form">
+                <div class="form-field">
+                    <label for="participantName">Dein Name *</label>
+                    <input type="text" id="participantName" placeholder="z.B. Max" required minlength="3" maxlength="15">
+                    <div class="hint">3–15 Zeichen (wird den anderen Helfern angezeigt)</div>
+                </div>
+                <div class="join-actions">
+                    <button type="submit" class="btn btn-confirm" id="joinBtn">Mitmachen</button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script src="api.js"></script>
+    <script>
+        var urlParams = new URLSearchParams(window.location.search);
+        var token = urlParams.get('token');
+        var invitation = null;
+        var report = null;
+
+        if (!token) {
+            document.getElementById('joinLoading').style.display = 'none';
+            document.getElementById('joinError').style.display = 'block';
+            document.getElementById('joinError').textContent = 'Kein Einladungslink. Bitte nutze den Link aus der Einladung.';
+        } else {
+            API.getInvitationByToken(token)
+                .then(function(inv) {
+                    invitation = inv;
+                    return API.getMissingReport(inv.missingReportId);
+                })
+                .then(function(r) {
+                    report = r;
+                    document.getElementById('joinLoading').style.display = 'none';
+                    document.getElementById('joinContent').style.display = 'block';
+
+                    document.getElementById('petName').textContent = report.petName;
+                    var species = ENUMS.species[report.species] || report.species;
+                    document.getElementById('petMeta').textContent = species + ' · Vermisst seit ' + formatDate(report.lostDate);
+                    document.getElementById('petDesc').textContent = report.description || 'Keine weitere Beschreibung.';
+                })
+                .catch(function(err) {
+                    document.getElementById('joinLoading').style.display = 'none';
+                    document.getElementById('joinError').style.display = 'block';
+                    document.getElementById('joinError').textContent = err.message || 'Einladung ungültig oder abgelaufen.';
+                });
+        }
+
+        document.getElementById('joinForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            if (!token || !invitation) return;
+
+            var name = document.getElementById('participantName').value.trim();
+            var btn = document.getElementById('joinBtn');
+            btn.disabled = true;
+            btn.textContent = 'Wird beigetreten...';
+
+            API.joinByToken(token, { name: name })
+                .then(function(singleUse) {
+                    var payload = {
+                        id: singleUse.id,
+                        name: singleUse.name,
+                        pin: singleUse.pin,
+                        reportId: invitation.missingReportId,
+                        isSingleUse: true
+                    };
+                    localStorage.setItem('singleUseParticipant', JSON.stringify(payload));
+                    window.location.href = 'search-view.html?id=' + invitation.missingReportId + '&role=participant';
+                })
+                .catch(function(err) {
+                    console.error('Join error:', err);
+                    var msg = (err && err.message) ? String(err.message) : 'Beitritt fehlgeschlagen.';
+                    alert(msg);
+                    btn.disabled = false;
+                    btn.textContent = 'Mitmachen';
+                });
+        });
+    </script>
+</body>
+</html>
