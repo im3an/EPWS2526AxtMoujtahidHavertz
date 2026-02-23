@@ -119,4 +119,34 @@ class MissingReportServiceImpl(
         }
     }
 
+    override fun search(
+        lat: Double?, lon: Double?, radius: Double,
+        petName: String?, species: String?, color: String?,
+        size: String?, age: String?,
+        page: Int, pageSize: Int
+    ): Page<MissingReportPreviewResponseDto> {
+
+        val pageable = PageRequest.of(page, pageSize)
+
+        val projections = if (lat != null && lon != null) {
+            missingReportRepository.findNearbyWithFilters(
+                lat, lon, radius, petName, species, color, size, age, pageable
+            )
+        } else {
+            missingReportRepository.findGlobalWithFilters(
+                petName, species, color, size, age, pageable
+            )
+        }
+
+        return projections.map { p ->
+            MissingReportPreviewResponseDto(
+                id = p.getId(),
+                petName = p.getPetName(),
+                species = p.getSpecies(),
+                previewImage = p.getPreviewImage() ?: "",
+                distanceToUser = p.getDistance()
+            )
+        }
+    }
+
 }

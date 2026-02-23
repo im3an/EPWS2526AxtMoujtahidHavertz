@@ -1,3 +1,6 @@
+<#import "layout.ftlh" as layout>
+
+<@layout.page_layout>
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -49,3 +52,4 @@
 
 <script src="/js/map.js"></script>
 </html>
+</@layout.page_layout>
